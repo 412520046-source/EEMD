@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電眼媒體 — 假新聞終結者</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#000;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:8px 0}
+  #gc{width:680px;background:#05050f;border:3px solid #00f0ff;box-shadow:0 0 0 1px #000,0 0 30px #00f0ff44;font-family:'Press Start 2P',monospace;position:relative;overflow:hidden;user-select:none}
+  canvas{display:block;width:100%;image-rendering:pixelated}
+  #ui{position:absolute;top:0;left:0;width:100%;padding:8px 12px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:5}
+  .stat{color:#00f0ff;font-size:9px;line-height:2;text-shadow:0 0 4px #00f0ff}
+  #rep-bar{width:110px;height:10px;background:#1a1a2e;border:1px solid #00f0ff;margin-top:3px}
+  #rep-fill{height:100%;background:#0f0;transition:width 0.3s;box-shadow:0 0 4px #0f0}
+  #overlay{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;background:rgba(0,0,10,0.93);z-index:30}
+  #overlay h2{color:#00f0ff;font-size:13px;text-align:center;text-shadow:0 0 8px #00f0ff;line-height:2.2}
+  #overlay p{color:#aaa;font-size:7.5px;text-align:center;line-height:2.4;max-width:82%}
+  .obtn{background:transparent;border:2px solid #00f0ff;color:#00f0ff;font-family:'Press Start 2P',monospace;font-size:9px;padding:10px 22px;cursor:pointer;text-shadow:0 0 4px #00f0ff;transition:all 0.2s;letter-spacing:1px}
+  .obtn:hover{background:#00f0ff22;box-shadow:0 0 12px #00f0ff66}
+  #judge-panel{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#06050f;border:2px solid #ff0090;padding:16px 20px;display:none;flex-direction:column;gap:10px;min-width:360px;z-index:20;box-shadow:0 0 30px #ff009066}
+  #judge-panel h3{color:#ff0090;font-size:9px;text-align:center;margin-bottom:2px;text-shadow:0 0 6px #ff0090;letter-spacing:1px}
+  #judge-timer{color:#fff;font-size:18px;text-align:center;margin-bottom:4px;text-shadow:0 0 10px #ff0090}
+  .jopt{background:#0d0020;border:1px solid #44005a;color:#e8ccff;font-family:'Press Start 2P',monospace;font-size:7px;padding:10px 12px;cursor:pointer;text-align:left;transition:all 0.15s;line-height:2}
+  .jopt:hover{border-color:#ff0090;color:#fff;background:#200035}
+  #msg{position:absolute;bottom:65px;left:50%;transform:translateX(-50%);font-family:'Press Start 2P',monospace;font-size:10px;pointer-events:none;white-space:nowrap;opacity:0;transition:opacity 0.3s;text-shadow:0 0 6px currentColor;z-index:15}
+  #blast-flash{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 0.1s;z-index:10}
+</style>
+</head>
+<body>
+<div id="gc">
+  <canvas id="c" width="680" height="400"></canvas>
+  <div id="ui">
+    <div class="stat">分數: <span id="sc">0</span></div>
+    <div class="stat" style="text-align:center;position:absolute;left:50%;transform:translateX(-50%)">LV.<span id="lvdisp">1</span></div>
+    <div class="stat" style="text-align:right">
+      公信力 <div id="rep-bar"><div id="rep-fill"></div></div>
+    </div>
+  </div>
+  <div id="blast-flash"></div>
+  <div id="msg"></div>
+  <div id="judge-panel">
+    <h3>⚡ 這則新聞的目的？(3秒) ⚡</h3>
+    <div id="judge-news-text" style="background:#0a001a;border:1px solid #ff009044;padding:8px 10px;font-family:'Noto Sans TC','Microsoft JhengHei',sans-serif;font-size:13px;color:#ffe8f8;line-height:1.8;text-align:center;min-height:48px;letter-spacing:1px;margin-bottom:2px;"></div>
+    <div id="judge-timer">3</div>
+    <button class="jopt" data-idx="0">💰 獲利 — 詐騙 / 飢餓行銷</button>
+    <button class="jopt" data-idx="1">👁 曝光 — 內容農場 / 標題黨</button>
+    <button class="jopt" data-idx="2">🗳 政治 — 抹黑 / 帶風向</button>
+    <button class="jopt" data-idx="3">🛡 公關 — 黑公關 / 惡意競爭</button>
+  </div>
+  <div id="overlay">
+    <h2>電眼媒體<br>假新聞終結者</h2>
+    <p>A / D 或 ← → 移動　空白鍵跳躍<br>對假新聞按住滑鼠左鍵蓄力<br>判讀正確後狂點滑鼠爆擊！<br>⚠ 真實訊息絕對不可攻擊！<br><br>💚 LINE綠衣大姐　💙 FB藍衫大叔　⚫ Threads黑T潮人</p>
+    <button class="obtn" id="startBtn">▶ 開始遊戲</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   WEB AUDIO API — PIXEL SFX
+   ═══════════════════════════════════════════════ */
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let ac = null;
+function getAC(){if(!ac)ac=new AudioCtx();if(ac.state==='suspended')ac.resume();return ac;}
+function playTone(freq,type,duration,gain=0.3,delay=0){
+  const a=getAC(),o=a.createOscillator(),g=a.createGain();
+  o.connect(g);g.connect(a.destination);
+  o.type=type;o.frequency.setValueAtTime(freq,a.currentTime+delay);
+  g.gain.setValueAtTime(0,a.currentTime+delay);
+  g.gain.linearRampToValueAtTime(gain,a.currentTime+delay+0.01);
+  g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+delay+duration);
+  o.start(a.currentTime+delay);o.stop(a.currentTime+delay+duration+0.01);
+}
+function sfxLoad(){[261,329,392,523].forEach((f,i)=>playTone(f,'square',0.12,0.25,i*0.08));}
+function sfxCorrect(){
+  playTone(523,'square',0.08,0.3,0);playTone(659,'square',0.08,0.3,0.1);
+  playTone(784,'square',0.10,0.35,0.2);playTone(1047,'square',0.12,0.3,0.32);
+}
+function sfxWrong(){
+  playTone(220,'sawtooth',0.15,0.4,0);playTone(180,'sawtooth',0.15,0.35,0.12);
+  playTone(140,'sawtooth',0.18,0.3,0.24);
+}
+function sfxLevelUp(){
+  [523,659,784,1047,784,1047,1175,1047].forEach((f,i)=>playTone(f,'square',0.1,0.28,i*0.07));
+  playTone(1319,'square',0.3,0.4,8*0.07);
+}
+function sfxCountdown(n){
+  if(n>1){playTone(880,'square',0.05,0.4,0);playTone(660,'square',0.04,0.2,0.06);}
+  else{playTone(1200,'square',0.06,0.5,0);playTone(900,'square',0.06,0.4,0.08);
+       playTone(1200,'square',0.06,0.5,0.16);playTone(900,'square',0.06,0.4,0.24);}
+}
+function sfxCharge(){
+  const a=getAC(),o=a.createOscillator(),g=a.createGain();
+  o.connect(g);g.connect(a.destination);o.type='sawtooth';
+  o.frequency.setValueAtTime(100,a.currentTime);
+  o.frequency.linearRampToValueAtTime(800,a.currentTime+0.4);
+  g.gain.setValueAtTime(0.15,a.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+0.4);
+  o.start();o.stop(a.currentTime+0.42);
+}
+function sfxBlast(){
+  const a=getAC(),buf=a.createBuffer(1,a.sampleRate*0.3,a.sampleRate),d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);
+  const src=a.createBufferSource(),g=a.createGain();
+  g.gain.setValueAtTime(0.4,a.currentTime);
+  src.buffer=buf;src.connect(g);g.connect(a.destination);src.start();src.stop(a.currentTime+0.3);
+}
+function sfxJump(){
+  playTone(300,'square',0.06,0.2,0);playTone(500,'square',0.05,0.15,0.05);
+}
+
+/* ═══════════════════════════════════════════════
+   NEWS DATA — 台灣話題，無 CP
+   ═══════════════════════════════════════════════ */
+// platform: 0=LINE, 1=FB, 2=Threads
+const NEWS = [
+  // ── LINE ──
+  {txt:'震驚！林志玲\n遭爆離婚！？\n日籍老公外遇曝光',ans:1,real:false,platform:0,badge:'👁 標題黨',badgeCol:'#22aa44',cardCol:'#001a08'},
+  {txt:'徐若瑄親愛的！\n轉發這則有好運\n一百人收到發財',ans:1,real:false,platform:0,badge:'👁 農場騙轉發',badgeCol:'#22aa44',cardCol:'#001a08'},
+  {txt:'【投資秘訣】張惠妹\n力推的神秘股票\n加LINE馬上致富',ans:0,real:false,platform:0,badge:'💰 投資詐騙',badgeCol:'#116622',cardCol:'#001505'},
+  {txt:'警告！明天起\n自來水管加氯量\n超標快囤水！',ans:1,real:false,platform:0,badge:'👁 恐慌謠言',badgeCol:'#22aa44',cardCol:'#001a08'},
+  {txt:'林志玲確認\n出席台北演唱會\n票務今日開放',ans:-1,real:true,platform:0,badge:'📢 訊息',badgeCol:'#226644',cardCol:'#001a08'},
+  {txt:'長輩圖：吃這個\n可以治百病！\n快轉發給家人',ans:0,real:false,platform:0,badge:'💰 健康詐騙',badgeCol:'#116622',cardCol:'#001505'},
+  {txt:'朋友在醫院工作\n提醒最近不要喝\n某超商大冰美式！',ans:1,real:false,platform:0,badge:'👁 恐慌謠言',badgeCol:'#22aa44',cardCol:'#001a08'},
+  // ── FACEBOOK ──
+  {txt:'藍寶快訊：陳時中\n被爆料私下貪污！\n獨家帳單照片流出',ans:2,real:false,platform:1,badge:'🗳 政治抹黑',badgeCol:'#1155cc',cardCol:'#000a20'},
+  {txt:'爆料！蔡英文\n秘密出訪美國\n媒體全被封鎖！',ans:2,real:false,platform:1,badge:'🗳 帶風向',badgeCol:'#1155cc',cardCol:'#000a20'},
+  {txt:'黃子佼事件最新\n法院裁定日期\n確定12月宣判',ans:-1,real:true,platform:1,badge:'📢 訊息',badgeCol:'#224488',cardCol:'#000a20'},
+  {txt:'廣告：柯以柔推薦\n黃金保值跌破\n眼鏡折扣限時',ans:0,real:false,platform:1,badge:'💰 名人蹭廣告',badgeCol:'#224499',cardCol:'#00081a'},
+  {txt:'侯友宜市長出席\n新北市防災演習\n完成指揮協調',ans:-1,real:true,platform:1,badge:'📢 訊息',badgeCol:'#224488',cardCol:'#000a20'},
+  {txt:'黑公關：競選對手\n的前助理爆料內幕\n你沒看到的真相',ans:3,real:false,platform:1,badge:'🛡 黑公關操作',badgeCol:'#335599',cardCol:'#000a1a'},
+  {txt:'市政府已內部決定\n明天停班停課\n只是還沒公布',ans:2,real:false,platform:1,badge:'🗳 謠言帶風向',badgeCol:'#1155cc',cardCol:'#000a20'},
+  // ── THREADS ──
+  {txt:'熱搜：鬼鬼吳映潔\n被爆靠關係出道\n業配都是黑幕錢',ans:3,real:false,platform:2,badge:'🛡 惡意競爭',badgeCol:'#555555',cardCol:'#101010'},
+  {txt:'爆：盧廣仲\n台北演唱會遭舉報\n現場混亂一片',ans:1,real:false,platform:2,badge:'👁 誇大標題',badgeCol:'#666666',cardCol:'#0d0d0d'},
+  {txt:'炎亞綸發文\n關心當年事件\n提倡社群自律',ans:-1,real:true,platform:2,badge:'📢 訊息',badgeCol:'#444444',cardCol:'#0d0d0d'},
+  {txt:'限時3小時！\nMr.6推薦的App\n點此下載超稀有功能',ans:0,real:false,platform:2,badge:'💰 飢餓行銷',badgeCol:'#444444',cardCol:'#0a0a0a'},
+  {txt:'文化部新政策\n短影音平台需\n標示AI合成內容',ans:-1,real:true,platform:2,badge:'📢 訊息',badgeCol:'#444444',cardCol:'#0d0d0d'},
+  {txt:'爆卦！某知名\nYoutuber被抓包\n抄襲國外頻道',ans:1,real:false,platform:2,badge:'👁 農場點擊',badgeCol:'#555555',cardCol:'#101010'},
+  {txt:'我朋友在IKEA打工\n他說閉店前展示櫃\n都可以直接拿',ans:1,real:false,platform:2,badge:'👁 謠言散播',badgeCol:'#555555',cardCol:'#101010'},
+];
+
+/* ═══════════════════════════════════════════════
+   ENGINE
+   ═══════════════════════════════════════════════ */
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+const W=680,H=400;
+canvas.width=W;canvas.height=H;
+const GROUND=H-90;
+const GRAVITY=0.55,JUMP=-12,SPEED=3.5;
+
+const state={
+  phase:'menu',score:0,rep:100,
+  px:80,py:GROUND,pvx:0,pvy:0,ponGround:true,
+  pdir:1,ptick:0,
+  charging:false,chargeTarget:null,chargeAmt:0,
+  judging:false,judgeTarget:null,
+  blasting:false,blastTarget:null,blastClicks:0,blastTimer:0,
+  stunned:false,stunTimer:0,
+  particles:[],keys:{},mouseDown:false,mx:0,my:0,
+  enemies:[],spawnTimer:80,lvl:1,scroll:0
+};
+
+function spawnEnemy(){
+  const t=NEWS[Math.floor(Math.random()*NEWS.length)];
+  const spd=0.65+state.lvl*0.22+Math.random()*0.4;
+  state.enemies.push({
+    x:W+10,y:GROUND-70,
+    w:210,h:80,
+    txt:t.txt,ans:t.ans,real:t.real,platform:t.platform,
+    badge:t.badge,badgeCol:t.badgeCol,cardCol:t.cardCol,
+    speed:spd,hp:1,captured:false,flash:0,
+    glow:Math.random()*Math.PI*2
+  });
+}
+
+function flashBg(col,dur){
+  const el=document.getElementById('blast-flash');
+  el.style.background=col;el.style.opacity='0.35';
+  setTimeout(()=>el.style.opacity='0',dur);
+}
+
+function showMsg(txt,col,dur=1300){
+  const el=document.getElementById('msg');
+  el.textContent=txt;el.style.color=col;el.style.opacity='1';
+  clearTimeout(el._t);el._t=setTimeout(()=>el.style.opacity='0',dur);
+}
+
+function penalize(msg){
+  state.rep=Math.max(0,state.rep-15);
+  state.stunned=true;state.stunTimer=90;
+  flashBg('#ff0000',400);
+  showMsg('⚡ '+msg,'#ff4444',1600);
+  sfxWrong();updateHUD();
+  if(state.rep<=0)gameOver();
+}
+
+let _jInterval=null;
+function openJudgePanel(enemy){
+  state.judging=true;state.judgeTarget=enemy;
+  const p=document.getElementById('judge-panel');
+  p.style.display='flex';
+  enemy.captured=true;
+  // Show the news text in the panel
+  const newsEl=document.getElementById('judge-news-text');
+  newsEl.textContent=enemy.txt.replace(/\n/g,' ');
+  let t=3;
+  document.getElementById('judge-timer').textContent=t;
+  sfxCountdown(t);
+  clearInterval(_jInterval);
+  _jInterval=setInterval(()=>{
+    t--;
+    document.getElementById('judge-timer').textContent=t;
+    if(t>0)sfxCountdown(t);
+    if(t<=0){
+      clearInterval(_jInterval);
+      const tgt=state.judgeTarget;
+      closeJudgePanel();
+      if(tgt)tgt.captured=false;
+      penalize('時間到！公信力受損');
+    }
+  },1000);
+}
+
+function closeJudgePanel(){
+  state.judging=false;state.judgeTarget=null;
+  document.getElementById('judge-panel').style.display='none';
+  clearInterval(_jInterval);
+}
+
+function startBlast(enemy){
+  state.blasting=true;state.blastTarget=enemy;
+  state.blastClicks=0;state.blastTimer=100;
+  showMsg('🔥 狂點爆擊！','#ffff00',2000);
+  sfxCharge();flashBg('#ff8800',200);
+}
+
+function updateHUD(){
+  document.getElementById('sc').textContent=state.score;
+  document.getElementById('lvdisp').textContent=state.lvl;
+  const rf=document.getElementById('rep-fill');
+  rf.style.width=state.rep+'%';
+  rf.style.background=state.rep>50?'#0f0':state.rep>25?'#ff0':'#f00';
+}
+
+function gameOver(){
+  state.phase='gameover';sfxWrong();
+  const g=state.score>2000?'S':state.score>1200?'A':state.score>600?'B':state.score>200?'C':'D';
+  const t={S:'電眼識讀大師',A:'資深事實查核員',B:'查核執行員',C:'媒體識讀實習生',D:'謠言受害者'}[g];
+  const ov=document.getElementById('overlay');
+  ov.innerHTML=`<h2 style="color:#ff0090">遊戲結束</h2>
+    <p>最終分數: ${state.score}<br><br>查核評級: ${g}<br>${t}</p>
+    <button class="obtn" id="restartBtn">▶ 再來一次</button>`;
+  ov.style.display='flex';
+  document.getElementById('restartBtn').addEventListener('click',initGame);
+}
+
+function initGame(){
+  sfxLoad();
+  Object.assign(state,{
+    phase:'playing',score:0,rep:100,
+    px:80,py:GROUND,pvx:0,pvy:0,ponGround:true,
+    pdir:1,ptick:0,
+    charging:false,chargeTarget:null,chargeAmt:0,
+    judging:false,judgeTarget:null,
+    blasting:false,blastTarget:null,blastClicks:0,blastTimer:0,
+    stunned:false,stunTimer:0,
+    enemies:[],spawnTimer:80,lvl:1,scroll:0,
+    keys:{},mouseDown:false
+  });
+  clearInterval(_jInterval);
+  document.getElementById('judge-panel').style.display='none';
+  document.getElementById('overlay').style.display='none';
+  document.getElementById('msg').style.opacity='0';
+  updateHUD();
+}
+
+function findNearest(){
+  let best=null,bestD=240;
+  for(let e of state.enemies){
+    if(e.hp<=0||e.captured)continue;
+    const d=Math.hypot(state.mx-(e.x+e.w/2),state.my-(e.y+e.h/2));
+    if(d<bestD){bestD=d;best=e;}
+  }
+  return best;
+}
+
+function spawnParticle(x,y,col){
+  state.particles.push({
+    x,y,vx:(Math.random()-0.5)*9,vy:(Math.random()-1)*8,
+    life:35+Math.random()*20,
+    col:col||['#ff0090','#00f0ff','#ffff00','#ff8800','#00ff88'][Math.floor(Math.random()*5)],
+    sz:3+Math.random()*4
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   UPDATE
+   ═══════════════════════════════════════════════ */
+function update(){
+  if(state.phase!=='playing')return;
+  state.ptick++;
+  if(state.judging)return;
+  if(state.stunned){if(--state.stunTimer<=0)state.stunned=false;return;}
+  if(state.blasting){
+    if(--state.blastTimer<=0||!state.blastTarget){
+      if(state.blastTarget&&state.blastClicks>0){
+        const bonus=Math.min(state.blastClicks*30,500);
+        state.score+=bonus;
+        const e=state.blastTarget;
+        for(let i=0;i<24;i++)spawnParticle(e.x+e.w/2,e.y+e.h/2);
+        e.hp=0;sfxBlast();flashBg('#ffffff',150);updateHUD();
+      }
+      state.blasting=false;state.blastTarget=null;
+    }
+    return;
+  }
+  if(state.keys['a']||state.keys['arrowleft']){state.pvx=-SPEED;state.pdir=-1;}
+  else if(state.keys['d']||state.keys['arrowright']){state.pvx=SPEED;state.pdir=1;}
+  else state.pvx=0;
+  if((state.keys[' ']||state.keys['arrowup'])&&state.ponGround){
+    state.pvy=JUMP;state.ponGround=false;sfxJump();
+  }
+  state.px+=state.pvx;
+  state.pvy+=GRAVITY;state.py+=state.pvy;
+  if(state.py>=GROUND){state.py=GROUND;state.pvy=0;state.ponGround=true;}
+  state.px=Math.max(20,Math.min(W-30,state.px));
+
+  const newLvl=1+Math.floor(state.score/500);
+  if(newLvl>state.lvl){
+    state.lvl=newLvl;sfxLevelUp();
+    showMsg('★ LEVEL UP! LV.'+state.lvl+' ★','#ffff00',2000);
+    flashBg('#ffff0044',500);updateHUD();
+  }
+
+  if(--state.spawnTimer<=0){
+    spawnEnemy();
+    state.spawnTimer=Math.max(60,180-state.lvl*12);
+  }
+
+  for(let e of state.enemies){
+    if(e.hp<=0)continue;
+    e.x-=e.speed;e.glow+=0.07;
+    if(e.flash>0)e.flash--;
+    if(e.x+e.w<-20){
+      if(!e.real)penalize('謠言漏網！公信力受損');
+      e.hp=0;
+    }
+  }
+  state.enemies=state.enemies.filter(e=>e.hp>0);
+
+  if(state.mouseDown&&!state.chargeTarget&&!state.blasting){
+    const n=findNearest();
+    if(n&&!n.real){state.charging=true;state.chargeTarget=n;state.chargeAmt=0;}
+    else if(n&&n.real){penalize('⚠ 不可攻擊真實資訊！');state.mouseDown=false;}
+  }
+  if(state.charging&&state.chargeTarget){
+    if(!state.mouseDown||state.chargeTarget.hp<=0){
+      state.charging=false;state.chargeTarget=null;state.chargeAmt=0;return;
+    }
+    state.chargeAmt=Math.min(state.chargeAmt+2.5,100);
+    if(state.chargeAmt>=100){
+      const t=state.chargeTarget;
+      state.charging=false;state.chargeTarget=null;state.chargeAmt=0;
+      openJudgePanel(t);
+    }
+  }
+  for(let p of state.particles){p.x+=p.vx;p.y+=p.vy;p.vy+=0.22;p.life--;}
+  state.particles=state.particles.filter(p=>p.life>0);
+  state.scroll+=0.5;
+}
+
+/* ═══════════════════════════════════════════════
+   DRAW — BG & GROUND
+   ═══════════════════════════════════════════════ */
+function drawBG(){
+  ctx.fillStyle='#05050f';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#ffffff06';ctx.lineWidth=1;
+  for(let i=0;i<9;i++){
+    const gx=((i*80-(state.scroll*0.28|0))%760+760)%760;
+    ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();
+  }
+  ctx.fillStyle='#00f0ff10';ctx.font='7px monospace';ctx.textAlign='left';
+  const ch=['0','1','▓','▒','░'];
+  for(let i=0;i<14;i++){
+    const bx=((i*50+(state.scroll*0.15|0))%760+760)%760;
+    ctx.fillText(ch[(state.ptick+i*3)%ch.length],bx,24+Math.sin(state.ptick*0.025+i)*14);
+  }
+}
+
+function drawGround(){
+  ctx.fillStyle='#0a1220';ctx.fillRect(0,GROUND+8,W,H-GROUND-8);
+  ctx.strokeStyle='#00f0ff';ctx.lineWidth=2;
+  ctx.shadowColor='#00f0ff';ctx.shadowBlur=10;
+  ctx.beginPath();ctx.moveTo(0,GROUND+8);ctx.lineTo(W,GROUND+8);ctx.stroke();
+  ctx.shadowBlur=0;
+  for(let i=0;i<10;i++){
+    const bx=((i*72-(state.scroll*0.45|0))%800+800)%800-10;
+    const bh=40+Math.sin(i*2.1)*28;
+    ctx.fillStyle='#081020';ctx.fillRect(bx,GROUND+8-bh,26,bh);
+    ctx.strokeStyle='#00f0ff1a';ctx.lineWidth=0.5;ctx.strokeRect(bx,GROUND+8-bh,26,bh);
+    for(let r=0;r<3;r++)for(let c=0;c<2;c++){
+      if(Math.sin(state.ptick*0.04+i+r*7+c*3)>0.2){
+        ctx.fillStyle='#00f0ff20';ctx.fillRect(bx+3+c*11,GROUND+8-bh+5+r*13,8,8);
+      }
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   DRAW — 3 NPC CHARACTERS
+   LINE: 華麗翡翠綠玉姐 (platform 0)
+   FB:   深寶藍珠寶太太 (platform 1)
+   Threads: 黑色潮男    (platform 2)
+   ═══════════════════════════════════════════════ */
+
+// Platform NPC colours
+const NPC_STYLE=[
+  // LINE - middle-aged woman, green
+  {bodyCol:'#0d6e2a',accentCol:'#2ecc52',skinCol:'#f5c896',hairCol:'#2a1a00',
+   shoeCol:'#1a4d10',emblemEmoji:'💚',labelCol:'#2ecc52',eyeCol:'#2ecc52'},
+  // FB - middle-aged man, blue
+  {bodyCol:'#0a2a8c',accentCol:'#4488ff',skinCol:'#e8b87a',hairCol:'#1a1000',
+   shoeCol:'#071855',emblemEmoji:'💙',labelCol:'#4488ff',eyeCol:'#4488ff'},
+  // Threads - young person, black T
+  {bodyCol:'#1a1a1a',accentCol:'#aaaaaa',skinCol:'#f0c888',hairCol:'#111111',
+   shoeCol:'#111111',emblemEmoji:'⚫',labelCol:'#cccccc',eyeCol:'#cccccc'},
+];
+
+function drawPlayer(){
+  const x=Math.round(state.px),y=Math.round(state.py);
+  ctx.save();ctx.translate(x,y);
+  if(state.pdir<0)ctx.scale(-1,1);
+  const blink=state.stunned&&Math.floor(state.ptick/5)%2===0;
+  const bob=state.ponGround?0:Math.sin(state.ptick*0.3)*1;
+
+  // Shadow
+  ctx.fillStyle='rgba(0,240,255,0.15)';
+  ctx.beginPath();ctx.ellipse(0,3,14,3,0,0,Math.PI*2);ctx.fill();
+
+  // Legs — dark trousers
+  ctx.fillStyle=blink?'#ff6666':'#111133';
+  const lx=state.ponGround?0:bob;
+  ctx.fillRect(-8,-20+lx,6,20);ctx.fillRect(2,-20-lx,6,20);
+  // Shoes — white sneakers
+  ctx.fillStyle=blink?'#ff9999':'#eee';
+  ctx.fillRect(-10,-1+lx,10,5);ctx.fillRect(1,-1-lx,11,5);
+  ctx.fillStyle='#aaa';ctx.fillRect(-10,-1+lx,10,2);ctx.fillRect(1,-1-lx,11,2);
+
+  // Body — black hoodie with magenta accent
+  ctx.fillStyle=blink?'#ff6666':'#111';
+  ctx.fillRect(-12,-44,24,26);
+  ctx.fillStyle=blink?'#ff4488':'#ff0090';
+  ctx.fillRect(-12,-44,4,26);ctx.fillRect(8,-44,4,26);
+  // Pocket
+  ctx.fillStyle='#222';ctx.fillRect(-7,-36,14,10);
+  ctx.fillStyle='#ff009033';ctx.fillRect(-7,-36,14,10);
+
+  // 放大鏡 arm
+  ctx.fillStyle=blink?'#ff6666':'#333';
+  ctx.fillRect(11,-43,7,19);ctx.fillRect(-18,-43,7,19);
+
+  // Magnifier
+  ctx.strokeStyle='#00f0ff';ctx.lineWidth=2.5;
+  ctx.shadowColor='#00f0ff';ctx.shadowBlur=10;
+  ctx.beginPath();ctx.arc(21,-29,9,0,Math.PI*2);ctx.stroke();
+  ctx.fillStyle='#00f0ff18';ctx.fill();
+  ctx.beginPath();ctx.moveTo(28,-21);ctx.lineTo(35,-14);ctx.stroke();
+  ctx.shadowBlur=0;
+  // Lens glint
+  ctx.fillStyle='#00f0ffaa';ctx.fillRect(16,-34,4,4);
+
+  // Head
+  ctx.fillStyle=blink?'#ff9988':'#f0c888';
+  ctx.fillRect(-9,-64,18,21);
+  // Hair black cap
+  ctx.fillStyle='#111';
+  ctx.fillRect(-11,-66,22,12);ctx.fillRect(-14,-64,5,8);ctx.fillRect(10,-68,5,10);
+  // Cap brim
+  ctx.fillRect(-13,-55,26,4);
+  // Visor / sunglasses
+  ctx.fillStyle='#ff009099';ctx.fillRect(-9,-57,9,5);
+  ctx.fillStyle='#ff009099';ctx.fillRect(1,-57,8,5);
+  ctx.fillStyle='#222';ctx.fillRect(-1,-57,2,5);
+
+  // Mouth smirk
+  ctx.fillStyle='#c06030';ctx.fillRect(-4,-46,5,3);ctx.fillRect(1,-46,3,2);
+
+  // Stun star
+  if(state.stunned){ctx.font='14px serif';ctx.textAlign='center';ctx.fillText('💫',0,-78);}
+
+  // Beam
+  if((state.charging||state.blasting)&&(state.chargeTarget||state.blastTarget)){
+    const tgt=state.blasting?state.blastTarget:state.chargeTarget;
+    ctx.strokeStyle=state.blasting?'#ff8800':'#00f0ff';
+    ctx.lineWidth=state.blasting?4:2;
+    ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=12;
+    ctx.setLineDash(state.blasting?[5,3]:[]);
+    ctx.beginPath();ctx.moveTo(19,-29);
+    ctx.lineTo(tgt.x+tgt.w/2-x,tgt.y+tgt.h/2-y);
+    ctx.stroke();ctx.setLineDash([]);ctx.shadowBlur=0;
+  }
+  ctx.restore();
+}
+
+/* ── NPC sprite floating above card ── */
+function drawNPCSprite(e){
+  if(e.hp<=0)return;
+  const s=NPC_STYLE[e.platform];
+  const cx=e.x+e.w/2;
+  // Float well above the card so NPC never overlaps card text
+  const floatY=e.y-75+Math.sin(state.ptick*0.04+e.glow)*3;
+  ctx.save();ctx.translate(cx,floatY);
+
+  // No drop shadow (NPC floats above card)
+
+  if(e.platform===0){
+    // ── LINE: 中年女性，綠色上衣長裙 ──
+    // 腿
+    ctx.fillStyle='#1a3a1a';ctx.fillRect(-7,18,6,16);ctx.fillRect(2,18,6,16);
+    // 鞋
+    ctx.fillStyle='#0d2a0d';ctx.fillRect(-9,33,9,4);ctx.fillRect(2,33,9,4);
+    // 身體 — 綠色上衣
+    ctx.fillStyle=s.bodyCol;ctx.fillRect(-11,-8,22,28);
+    // 領口
+    ctx.fillStyle='#0a4a1a';ctx.fillRect(-5,-8,10,7);
+    // 手臂
+    ctx.fillStyle=s.bodyCol;ctx.fillRect(-15,-6,4,18);ctx.fillRect(11,-6,4,18);
+    // 手
+    ctx.fillStyle=s.skinCol;ctx.fillRect(-15,10,4,8);ctx.fillRect(11,10,4,8);
+    // 長裙
+    ctx.fillStyle='#0a4020';
+    ctx.beginPath();ctx.moveTo(-11,20);ctx.lineTo(11,20);ctx.lineTo(14,36);ctx.lineTo(-14,36);ctx.closePath();ctx.fill();
+    // 頭
+    ctx.fillStyle=s.skinCol;ctx.fillRect(-8,-26,16,20);
+    // 短髮
+    ctx.fillStyle=s.hairCol;
+    ctx.fillRect(-9,-30,18,8);
+    ctx.beginPath();ctx.arc(0,-28,9,Math.PI,0);ctx.fill();
+    ctx.fillRect(-9,-26,3,6);ctx.fillRect(6,-26,3,6);
+    // 眼睛
+    ctx.fillStyle='#222';ctx.fillRect(-5,-20,4,3);ctx.fillRect(1,-20,4,3);
+    // 眼白
+    ctx.fillStyle=s.accentCol;ctx.fillRect(-4,-19,2,2);ctx.fillRect(2,-19,2,2);
+    // 嘴
+    ctx.fillStyle='#c04040';ctx.fillRect(-3,-13,7,2);
+  }
+  else if(e.platform===1){
+    // ── FB: 中年男性，藍色polo衫 ──
+    // 腿褲子
+    ctx.fillStyle='#1a1a3a';ctx.fillRect(-8,16,7,20);ctx.fillRect(2,16,7,20);
+    // 鞋
+    ctx.fillStyle='#111';ctx.fillRect(-10,35,10,4);ctx.fillRect(2,35,10,4);
+    // 身體 — 藍色polo衫
+    ctx.fillStyle=s.bodyCol;ctx.fillRect(-12,-10,24,28);
+    // polo領
+    ctx.fillStyle='#0a2255';ctx.fillRect(-5,-10,10,8);
+    ctx.fillStyle='#1a5acc';ctx.fillRect(-3,-10,6,6);
+    // 手臂短袖
+    ctx.fillStyle=s.bodyCol;ctx.fillRect(-16,-8,4,14);ctx.fillRect(12,-8,4,14);
+    // 手
+    ctx.fillStyle=s.skinCol;ctx.fillRect(-16,5,4,10);ctx.fillRect(12,5,4,10);
+    // 肚腩（中年男特徵）
+    ctx.fillStyle='#0a2a8a';ctx.fillRect(-10,8,20,10);
+    // 頭
+    ctx.fillStyle=s.skinCol;ctx.fillRect(-9,-28,18,20);
+    // 短髮偏禿（中年男）
+    ctx.fillStyle=s.hairCol;
+    ctx.fillRect(-9,-32,18,6);
+    ctx.fillRect(-9,-28,3,4);ctx.fillRect(6,-28,3,4);
+    // 臉部特徵 - 眉毛粗
+    ctx.fillStyle='#3a1a00';ctx.fillRect(-6,-22,5,2);ctx.fillRect(1,-22,5,2);
+    // 眼睛
+    ctx.fillStyle='#111';ctx.fillRect(-5,-19,4,3);ctx.fillRect(1,-19,4,3);
+    ctx.fillStyle=s.accentCol;ctx.fillRect(-4,-18,2,2);ctx.fillRect(2,-18,2,2);
+    // 嘴巴/鬍鬚
+    ctx.fillStyle='#5a3010';ctx.fillRect(-5,-12,10,3);
+    ctx.fillStyle='#8a5020';ctx.fillRect(-3,-10,6,2);
+  }
+  else{
+    // ── Threads: 年輕人，黑色T恤 ──
+    // 腿
+    ctx.fillStyle='#111';ctx.fillRect(-7,18,7,18);ctx.fillRect(1,18,7,18);
+    // 球鞋
+    ctx.fillStyle='#eee';ctx.fillRect(-9,34,10,5);ctx.fillRect(1,34,10,5);
+    ctx.fillStyle='#ccc';ctx.fillRect(-9,34,10,2);ctx.fillRect(1,34,10,2);
+    // 身體 — 黑色T恤
+    ctx.fillStyle='#1a1a1a';ctx.fillRect(-12,-10,24,30);
+    // 衣領圓領
+    ctx.fillStyle='#111';ctx.fillRect(-5,-10,10,5);
+    // 手臂短袖
+    ctx.fillStyle='#1a1a1a';ctx.fillRect(-16,-8,5,14);ctx.fillRect(11,-8,5,14);
+    // 手
+    ctx.fillStyle=s.skinCol;ctx.fillRect(-16,5,5,10);ctx.fillRect(11,5,5,10);
+    // 頭
+    ctx.fillStyle=s.skinCol;ctx.fillRect(-8,-28,16,20);
+    // 短髮潮男
+    ctx.fillStyle='#111';
+    ctx.fillRect(-9,-34,18,9);
+    ctx.beginPath();ctx.arc(0,-30,9,Math.PI,0);ctx.fill();
+    // 瀏海
+    ctx.fillRect(-9,-28,5,5);
+    // 眼睛細長
+    ctx.fillStyle='#111';ctx.fillRect(-5,-21,4,2);ctx.fillRect(1,-21,4,2);
+    ctx.fillStyle=s.eyeCol;ctx.fillRect(-4,-21,2,1);ctx.fillRect(2,-21,2,1);
+    // 嘴
+    ctx.fillStyle='#8a5020';ctx.fillRect(-3,-14,6,3);
+    // 耳環一個
+    ctx.fillStyle='#aaa';ctx.beginPath();ctx.arc(-9,-21,2,0,Math.PI*2);ctx.fill();
+  }
+
+  // Platform label floating above head
+  ctx.fillStyle=s.labelCol;
+  ctx.font='bold 6px "Press Start 2P",monospace';ctx.textAlign='center';
+  const plabels=['LINE','FB','Threads'];
+  ctx.fillText(plabels[e.platform],0,-42);
+
+  ctx.restore();
+}
+
+/* ── NEWS CARD ── */
+function drawCard(e){
+  if(e.hp<=0)return;
+  const pulse=Math.sin(e.glow)*0.5+0.5;
+  ctx.save();
+  // Subtle uniform glow — doesn't reveal real vs fake
+
+  // Card body
+  ctx.fillStyle=e.flash>0?'#2a0015':e.cardCol;
+  ctx.fillRect(e.x,e.y,e.w,e.h);
+
+  // Border — neutral, does not reveal real vs fake
+  ctx.strokeStyle=e.flash>0?'#ffff00':'#4466aa';
+  ctx.lineWidth=e.flash>0?2.5:1.5;
+  ctx.strokeRect(e.x,e.y,e.w,e.h);
+  ctx.shadowBlur=0;
+
+  // Badge strip — neutral grey, badge text does not say real/fake directly
+  ctx.fillStyle='#1a1a3a';
+  ctx.fillRect(e.x+1,e.y+1,e.w-2,17);
+  // Platform color accent left edge
+  const platColor=['#00cc44','#1877f2','#333333'][e.platform];
+  ctx.fillStyle=platColor;
+  ctx.fillRect(e.x+1,e.y+1,4,17);
+  ctx.fillStyle='#ccc';
+  ctx.font='bold 7px "Press Start 2P",monospace';
+  ctx.textAlign='left';
+  ctx.fillText(e.badge,e.x+9,e.y+13);
+
+  // News text — clear CJK font
+  const lines=e.txt.split('\n');
+  ctx.textAlign='left';
+  lines.forEach((line,i)=>{
+    if(i>=3)return;
+    const fy=e.y+32+i*17;
+    ctx.font=`bold 13px 'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif`;
+    // Drop shadow for readability
+    ctx.fillStyle='rgba(0,0,0,0.8)';
+    ctx.fillText(line,e.x+7,fy+1);
+    ctx.fillStyle='#ffe8f8';
+    ctx.fillText(line,e.x+6,fy);
+  });
+
+  // Capture highlight
+  if(e.captured&&state.charging){
+    ctx.strokeStyle='#ffff00';ctx.lineWidth=2;
+    ctx.shadowColor='#ffff00';ctx.shadowBlur=10;
+    ctx.strokeRect(e.x-3,e.y-3,e.w+6,e.h+6);
+    ctx.shadowBlur=0;
+  }
+
+  // No footer hint — don't reveal real vs fake to player
+
+  // Charge bar
+  if(e.captured&&state.charging){
+    ctx.fillStyle='#00f0ff22';ctx.fillRect(e.x,e.y-12,e.w,7);
+    const grad=ctx.createLinearGradient(e.x,0,e.x+e.w,0);
+    grad.addColorStop(0,'#00f0ff');grad.addColorStop(1,'#ff0090');
+    ctx.fillStyle=grad;ctx.fillRect(e.x,e.y-12,e.w*(state.chargeAmt/100),7);
+    ctx.strokeStyle='#00f0ff66';ctx.lineWidth=0.5;ctx.strokeRect(e.x,e.y-12,e.w,7);
+    ctx.fillStyle='#fff';
+    ctx.font='5px "Press Start 2P",monospace';ctx.textAlign='center';
+    ctx.fillText('蓄力 '+Math.round(state.chargeAmt)+'%',e.x+e.w/2,e.y-6);
+  }
+
+  ctx.restore();
+
+  // NPC floats above the card (drawn last so it's on top)
+  drawNPCSprite(e);
+}
+
+function drawBlastEffect(){
+  if(!state.blasting||!state.blastTarget)return;
+  const e=state.blastTarget;
+  if(Math.floor(state.ptick/3)%2===0){
+    ctx.strokeStyle='#ff8800';ctx.lineWidth=3;
+    ctx.shadowColor='#ff8800';ctx.shadowBlur=20;
+    ctx.strokeRect(e.x-4,e.y-4,e.w+8,e.h+8);
+    ctx.shadowBlur=0;
+  }
+  ctx.fillStyle='#ffcc00';ctx.shadowColor='#ff8800';ctx.shadowBlur=6;
+  ctx.font='bold 8px "Press Start 2P",monospace';ctx.textAlign='center';
+  ctx.fillText('CLICK ×'+state.blastClicks,e.x+e.w/2,e.y-17);
+  ctx.shadowBlur=0;
+}
+
+function drawParticles(){
+  for(let p of state.particles){
+    ctx.fillStyle=p.col;ctx.shadowColor=p.col;ctx.shadowBlur=5;
+    ctx.fillRect(Math.round(p.x),Math.round(p.y),Math.ceil(p.sz),Math.ceil(p.sz));
+  }
+  ctx.shadowBlur=0;
+}
+
+function drawTargetLine(){
+  if(state.judging||state.stunned)return;
+  const n=findNearest();if(!n)return;
+  ctx.strokeStyle='#00f0ff88';
+  ctx.lineWidth=0.8;ctx.setLineDash([4,4]);
+  ctx.shadowColor='#00f0ff';ctx.shadowBlur=4;
+  ctx.beginPath();ctx.moveTo(state.px,state.py-30);
+  ctx.lineTo(n.x+n.w/2,n.y+n.h/2);
+  ctx.stroke();ctx.setLineDash([]);ctx.shadowBlur=0;
+}
+
+/* ═══════════════════════════════════════════════
+   RENDER LOOP
+   ═══════════════════════════════════════════════ */
+function render(){
+  drawBG();drawGround();
+  for(let e of state.enemies)drawCard(e);
+  drawPlayer();
+  drawBlastEffect();drawParticles();drawTargetLine();
+}
+
+let lastTime=0;
+function loop(ts){
+  if(ts-lastTime>=16){update();render();lastTime=ts;}
+  requestAnimationFrame(loop);
+}
+
+/* ═══════════════════════════════════════════════
+   INPUT
+   ═══════════════════════════════════════════════ */
+document.addEventListener('keydown',e=>{
+  if(state.phase!=='playing')return;
+  state.keys[e.key.toLowerCase()]=true;
+  if(e.key===' ')e.preventDefault();
+});
+document.addEventListener('keyup',e=>{state.keys[e.key.toLowerCase()]=false;});
+canvas.addEventListener('mousedown',e=>{
+  if(state.phase!=='playing')return;
+  if(state.blasting){state.blastClicks++;return;}
+  state.mouseDown=true;
+  const r=canvas.getBoundingClientRect();
+  state.mx=(e.clientX-r.left)*W/r.width;
+  state.my=(e.clientY-r.top)*H/r.height;
+});
+canvas.addEventListener('mouseup',()=>{
+  state.mouseDown=false;
+  if(!state.blasting){state.charging=false;state.chargeTarget=null;state.chargeAmt=0;}
+});
+canvas.addEventListener('mousemove',e=>{
+  const r=canvas.getBoundingClientRect();
+  state.mx=(e.clientX-r.left)*W/r.width;
+  state.my=(e.clientY-r.top)*H/r.height;
+});
+
+document.querySelectorAll('.jopt').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    if(!state.judging||!state.judgeTarget)return;
+    clearInterval(_jInterval);
+    const chosen=parseInt(btn.dataset.idx);
+    const target=state.judgeTarget;
+    closeJudgePanel();
+    if(chosen===target.ans){
+      sfxCorrect();flashBg('#ff8800',200);
+      showMsg('✅ 判讀正確！爆擊模式！','#ffff00',1500);
+      startBlast(target);
+    } else {
+      target.captured=false;
+      penalize('判讀錯誤！公信力受損');
+      target.flash=30;
+    }
+  });
+});
+
+document.getElementById('startBtn').addEventListener('click',()=>{getAC();initGame();});
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
