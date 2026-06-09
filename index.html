@@ -10,65 +10,69 @@
 body{background:#07071a;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:8px;font-family:'Press Start 2P',monospace;overflow:hidden}
 #gw{position:relative;width:680px;height:400px;background:#07071a;border:3px solid #00f0ff;box-shadow:0 0 0 1px #000,0 0 40px #00f0ff55;overflow:hidden;user-select:none;flex-shrink:0}
 canvas{display:block;image-rendering:pixelated}
-/* ── HUD ── */
 #hud{position:absolute;top:0;left:0;width:100%;padding:7px 12px;display:none;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:10;font-size:7px;color:#00f0ff;text-shadow:0 0 4px #00f0ff;line-height:2.2}
 .hud-c{position:absolute;left:50%;transform:translateX(-50%);text-align:center}
 .rep-bar{width:90px;height:7px;background:#1a1a2e;border:1px solid #00f0ff;margin-top:3px}
 .rep-fill{height:100%;transition:width .3s}
-/* ── OVERLAYS ── */
 .ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:30;gap:0}
 .hidden{display:none!important}
-/* ── INTRO SCREENS ── */
+/* ── INTRO ── */
 #intro{background:linear-gradient(160deg,#07071a 60%,#12032a)}
-.intro-title{font-family:'Noto Sans TC',sans-serif;font-weight:900;font-size:62px;letter-spacing:4px;text-align:center;line-height:1;background:linear-gradient(135deg,#00f0ff,#ff0090,#ffff00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 18px #00f0ff88);margin-bottom:8px}
-.intro-sub{font-family:'Noto Sans TC',sans-serif;font-weight:700;font-size:20px;color:#aaa;letter-spacing:8px;margin-bottom:32px}
-.intro-eye{font-size:48px;margin-bottom:12px;animation:eyePulse 2s infinite}
+.intro-title{font-family:'Noto Sans TC',sans-serif;font-weight:900;font-size:58px;letter-spacing:3px;text-align:center;line-height:1;background:linear-gradient(135deg,#00f0ff,#ff0090,#ffff00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 18px #00f0ff88);margin-bottom:6px}
+.intro-sub{font-family:'Noto Sans TC',sans-serif;font-weight:700;font-size:18px;color:#aaa;letter-spacing:7px;margin-bottom:22px}
+.intro-eye{font-size:44px;margin-bottom:10px;animation:eyePulse 2s infinite}
 @keyframes eyePulse{0%,100%{filter:drop-shadow(0 0 8px #00f0ff)}50%{filter:drop-shadow(0 0 24px #ff0090)}}
-.card-panel{background:rgba(10,10,30,0.88);border:1.5px solid #ffffff18;border-radius:18px;padding:28px 36px;width:82%;max-width:440px;box-shadow:0 4px 40px #00000088}
-.card-row{display:flex;align-items:center;gap:14px;margin-bottom:18px}
-.card-icon{font-size:28px;flex-shrink:0}
-.card-text{font-family:'Noto Sans TC',sans-serif;font-weight:700;font-size:16px;color:#eee;line-height:1.6}
-.card-text small{font-size:12px;color:#aaa;font-weight:400}
-.page-indicator{display:flex;gap:8px;margin-bottom:20px}
-.page-dot{width:8px;height:8px;border-radius:50%;background:#ffffff33;transition:all .3s}
-.page-dot.active{background:#00f0ff;box-shadow:0 0 8px #00f0ff}
-.next-btn{font-family:'Noto Sans TC',sans-serif;font-weight:700;font-size:18px;background:linear-gradient(90deg,#1a0040,#2a0060);border:2px solid #7a40ff;border-radius:40px;color:#fff;padding:14px 52px;cursor:pointer;letter-spacing:3px;box-shadow:0 0 20px #7a40ff44;transition:all .2s}
-.next-btn:hover{background:linear-gradient(90deg,#2a0060,#3a00aa);box-shadow:0 0 30px #7a40ff88}
-.lv-badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;font-family:'Noto Sans TC',sans-serif;margin-right:6px}
+/* card panel — fixed height so buttons never get cut off */
+.card-panel{background:rgba(10,10,30,0.92);border:1.5px solid #ffffff18;border-radius:16px;padding:18px 28px;width:86%;max-width:480px;box-shadow:0 4px 40px #00000088;display:flex;flex-direction:column}
+.card-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:13px}
+.card-icon{font-size:24px;flex-shrink:0;margin-top:1px}
+.card-text{font-family:'Noto Sans TC',sans-serif;font-weight:700;font-size:14px;color:#eee;line-height:1.55}
+.card-text small{font-size:11px;color:#aaa;font-weight:400;display:block;margin-top:1px}
+.page-dots{display:flex;gap:7px;justify-content:center;margin-bottom:14px}
+.page-dot{width:7px;height:7px;border-radius:50%;background:#ffffff22;transition:all .3s}
+.page-dot.active{background:#00f0ff;box-shadow:0 0 7px #00f0ff}
+.btn-row{display:flex;gap:10px;justify-content:center;margin-top:4px;flex-shrink:0}
+.nbtn{font-family:'Noto Sans TC',sans-serif;font-weight:700;font-size:15px;background:linear-gradient(90deg,#1a0040,#2a0060);border:2px solid #7a40ff;border-radius:40px;color:#fff;padding:10px 28px;cursor:pointer;letter-spacing:2px;box-shadow:0 0 16px #7a40ff44;transition:all .2s;white-space:nowrap}
+.nbtn:hover,.nbtn:focus{background:linear-gradient(90deg,#2a0060,#3a00aa);box-shadow:0 0 26px #7a40ff88;outline:none}
+.nbtn.green{background:linear-gradient(90deg,#006622,#00aa44);border-color:#00ff88;box-shadow:0 0 16px #00ff8833}
+.nbtn.green:hover{box-shadow:0 0 28px #00ff8877}
 /* ── JUDGE PANEL ── */
-#judge-panel{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:35;width:88%;max-width:400px;background:#080018;border:2px solid #ff0090;box-shadow:0 0 30px #ff009066;padding:14px;display:flex;flex-direction:column;gap:7px}
-#judge-countdown{color:#fff;font-size:60px;text-align:center;font-family:'Noto Sans TC',sans-serif;font-weight:900;text-shadow:0 0 20px #ff0090,0 0 40px #ff4400;line-height:1;margin:4px 0}
+#judge-panel{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:35;width:88%;max-width:400px;background:#080018;border:2px solid #ff0090;box-shadow:0 0 30px #ff009066;padding:12px;display:flex;flex-direction:column;gap:6px}
+#judge-countdown{color:#fff;font-size:56px;text-align:center;font-family:'Noto Sans TC',sans-serif;font-weight:900;text-shadow:0 0 20px #ff0090,0 0 40px #ff4400;line-height:1;margin:2px 0}
 #judge-countdown.urgent{animation:countUrgent .15s infinite alternate}
 @keyframes countUrgent{from{transform:scale(1)}to{transform:scale(1.12);color:#ff2200}}
 .jlabel{color:#ff0090;font-size:8px;text-align:center;text-shadow:0 0 6px #ff0090;letter-spacing:1px}
 .jtimer-wrap{display:flex;align-items:center;gap:8px;justify-content:center}
 .jtimer-bar{width:180px;height:5px;background:#1a1a2e;border-radius:3px;overflow:hidden;border:1px solid #ff009066}
 #jtimer-fill{height:100%;width:100%;background:#00ff88;transition:width .4s linear,background .3s}
-#jnews{background:#0a0020;border:1px solid #440066;padding:8px 10px;margin:0}
-#jbadge{color:#aaa;font-size:7px;margin-bottom:6px;letter-spacing:1px;font-family:monospace}
-#jtext{color:#fff;font-size:15px;font-family:'Noto Sans TC',sans-serif;font-weight:700;line-height:1.65}
+#jnews{background:#0a0020;border:1px solid #440066;padding:8px 10px}
+#jbadge{color:#888;font-size:6px;margin-bottom:4px;letter-spacing:1px}
+#jtext{color:#ffe8f8;font-size:14px;font-family:'Noto Sans TC',sans-serif;font-weight:700;line-height:1.6}
 .jbtn{background:#0d0020;border:1px solid #44005a;color:#e8ccff;font-family:'Press Start 2P',monospace;font-size:7px;padding:7px 10px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:1px;transition:all .12s}
 .jbtn:hover{background:#200035;border-color:#ff0090;color:#fff}
 .jbtn small{font-size:5px;color:#aaa;font-family:sans-serif}
 /* ── BURST ── */
-#burst-ov{position:absolute;z-index:20;pointer-events:none;top:48%;left:50%;transform:translate(-50%,-50%);width:320px}
-#burst-hint{color:#ffff00;font-size:8px;text-align:center;text-shadow:0 0 8px #ff8800;margin-bottom:6px;animation:pulse .3s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-.burst-bar-wrap{position:relative;width:100%;height:26px;background:#111;border:2px solid #ff0090;border-radius:4px;overflow:hidden;box-shadow:0 0 16px #ff009088}
-#burst-fill{position:absolute;left:0;top:0;bottom:0;width:50%;background:linear-gradient(90deg,#00f0ff,#00ff88);box-shadow:0 0 12px #00f0ffaa}
-#burst-heart{position:absolute;top:50%;transform:translateY(-50%);font-size:18px;line-height:1;filter:drop-shadow(0 0 4px #ff0090)}
-#burst-clicks{color:#ffffff88;font-size:6px;text-align:center;margin-top:4px}
+#burst-ov{position:absolute;z-index:20;pointer-events:none;top:44%;left:50%;transform:translate(-50%,-50%);width:310px;background:rgba(5,5,20,.82);border:1px solid #00f0ff44;border-radius:10px;padding:12px 14px}
+#burst-hint{color:#ffff00;font-size:8px;text-align:center;text-shadow:0 0 8px #ff8800;margin-bottom:8px;animation:pulse .35s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.bcounter{display:flex;align-items:baseline;justify-content:center;gap:8px;margin-bottom:8px}
+#b-clicks{font-family:'Noto Sans TC',sans-serif;font-weight:900;font-size:40px;color:#fff;text-shadow:0 0 14px #00f0ff;min-width:54px;text-align:right;line-height:1}
+.b-slash{color:#ffffff55;font-size:14px;font-family:'Press Start 2P',monospace}
+#b-target{color:#ffcc00;font-size:14px;font-family:'Press Start 2P',monospace}
+.b-unit{color:#ffcc00;font-size:11px;font-family:'Noto Sans TC',sans-serif;font-weight:700}
+.bpbar{width:100%;height:10px;background:#1a1a2e;border:1px solid #00f0ff55;border-radius:5px;overflow:hidden;margin-bottom:6px}
+#b-fill{height:100%;width:0%;background:linear-gradient(90deg,#00f0ff,#00ff88);border-radius:5px;transition:width .06s}
+.bfooter{display:flex;justify-content:space-between}
+#b-timer{color:#ff8844;font-size:6px;font-family:'Press Start 2P',monospace}
+#b-remain{font-size:6px;font-family:'Press Start 2P',monospace;color:#aaa}
 /* ── BOSS WARN ── */
 #boss-warn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,0,0,.9);z-index:40;pointer-events:none;animation:bwFade 4.5s forwards}
 @keyframes bwFade{0%{opacity:0}8%{opacity:1}78%{opacity:1}100%{opacity:0}}
 .bw-text{color:#ff0000;font-size:20px;text-align:center;font-family:'Noto Sans TC',sans-serif;font-weight:900;text-shadow:0 0 12px #ff0000,0 0 30px #ff4400;letter-spacing:2px;line-height:2.2;animation:bwText 4.5s forwards}
 @keyframes bwText{0%{transform:scale(.8);opacity:0}12%{transform:scale(1.06);opacity:1}78%{transform:scale(1);opacity:1}100%{transform:scale(1.1);opacity:0}}
-/* ── ENDING ── */
 #ending{background:#07071a}
 #end-canvas{image-rendering:pixelated;border:1px solid #ffffff11}
-/* ── MSG ── */
 #msg{position:absolute;bottom:62px;left:50%;transform:translateX(-50%);font-size:10px;pointer-events:none;white-space:nowrap;opacity:0;text-shadow:0 0 6px currentColor;z-index:15;transition:opacity .3s}
-/* ── FIRE BG ── */
 #fire-canvas{position:absolute;inset:0;pointer-events:none;z-index:1;opacity:0;transition:opacity .8s}
 </style>
 </head>
@@ -88,53 +92,63 @@ canvas{display:block;image-rendering:pixelated}
     </div>
   </div>
 
-  <!-- INTRO (3 pages) -->
+  <!-- INTRO — 4 pages -->
   <div class="ov" id="intro">
-    <!-- page 0: title -->
+    <!-- p0: title -->
     <div id="ip0">
       <div class="intro-eye">👁</div>
       <div class="intro-title">電眼媒體</div>
       <div class="intro-sub">假新聞終結者</div>
-      <div class="page-indicator" style="justify-content:center;margin-bottom:24px">
-        <div class="page-dot active"></div><div class="page-dot"></div><div class="page-dot"></div>
-      </div>
-      <button class="next-btn" onclick="introPg(1)">開 始 介 紹 →</button>
+      <div class="page-dots"><div class="page-dot active"></div><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot"></div></div>
+      <div class="btn-row"><button class="nbtn" onclick="introPg(1)">開 始 介 紹 →</button></div>
     </div>
-    <!-- page 1: how to play -->
+    <!-- p1: controls -->
     <div id="ip1" class="hidden">
-      <div class="card-panel" style="padding:22px 28px;gap:0">
-        <div class="page-indicator" style="justify-content:center;margin-bottom:16px">
-          <div class="page-dot"></div><div class="page-dot active"></div><div class="page-dot"></div>
-        </div>
-        <div class="card-row" style="margin-bottom:14px"><span class="card-icon">🖱️</span><div class="card-text" style="font-size:15px">移動滑鼠控制角色</div></div>
-        <div class="card-row" style="margin-bottom:14px"><span class="card-icon">🔍⚡</span><div class="card-text" style="font-size:15px">點擊假新聞 → 判斷目的<br><small>判對後狂按空白鍵 / 點擊收復</small></div></div>
-        <div class="card-row" style="margin-bottom:18px"><span class="card-icon">⚠️</span><div class="card-text" style="font-size:15px">真實新聞不可攻擊<br><small>誤判扣公信力</small></div></div>
-        <div style="display:flex;gap:12px;justify-content:center">
-          <button class="next-btn" style="padding:11px 24px;font-size:14px;letter-spacing:1px" onclick="introPg(0)">← 返回</button>
-          <button class="next-btn" style="padding:11px 24px;font-size:14px;letter-spacing:1px" onclick="introPg(2)">關卡介紹 →</button>
+      <div class="card-panel">
+        <div class="page-dots"><div class="page-dot"></div><div class="page-dot active"></div><div class="page-dot"></div><div class="page-dot"></div></div>
+        <div class="card-row"><span class="card-icon">🖱️</span><div class="card-text">移動滑鼠控制角色<small>學生查核員跟隨游標左右移動</small></div></div>
+        <div class="card-row"><span class="card-icon">🔍</span><div class="card-text">點擊假新聞 NPC<small>進入 7 秒判斷倒數，選出傳播目的</small></div></div>
+        <div class="card-row"><span class="card-icon">⚡</span><div class="card-text">判對 → 在時限內狂點收復！<small>Lv1: 3下 / Lv2: 10下 / Lv3-4: 15下</small></div></div>
+        <div class="card-row" style="margin-bottom:4px"><span class="card-icon">⚠️</span><div class="card-text">真實新聞絕不可攻擊<small>誤判扣公信力，錯 5 次即任務失敗</small></div></div>
+        <div class="btn-row">
+          <button class="nbtn" onclick="introPg(0)">← 返回</button>
+          <button class="nbtn" onclick="introPg(2)">下一頁 →</button>
         </div>
       </div>
     </div>
-    <!-- page 2: levels -->
+    <!-- p2: judge categories -->
     <div id="ip2" class="hidden">
-      <div class="card-panel" style="padding:20px 28px">
-        <div class="page-indicator" style="justify-content:center;margin-bottom:16px">
-          <div class="page-dot"></div><div class="page-dot"></div><div class="page-dot active"></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 16px">
-          <div class="card-row" style="margin:0"><span class="card-icon" style="font-size:20px">1️⃣</span><div class="card-text" style="font-size:14px">LV1 收復 2 個<br><small>基礎判讀</small></div></div>
-          <div class="card-row" style="margin:0"><span class="card-icon" style="font-size:20px">2️⃣</span><div class="card-text" style="font-size:14px">LV2 收復 3 個<br><small>NPC 開始走動</small></div></div>
-          <div class="card-row" style="margin:0"><span class="card-icon" style="font-size:20px">3️⃣</span><div class="card-text" style="font-size:14px">LV3 收復 4 個<br><small>真實新聞出現</small></div></div>
-          <div class="card-row" style="margin:0"><span class="card-icon" style="font-size:20px">4️⃣</span><div class="card-text" style="font-size:14px">LV4 收復 5 個<br><small>含更多真實新聞</small></div></div>
-        </div>
-        <div class="card-row" style="margin:14px 0 4px;background:#2a000f;padding:10px;border-radius:8px;border:1px solid #ff009055">
-          <span class="card-icon">⚔️</span>
-          <div class="card-text" style="font-size:14px;color:#ff4488">LV5 BOSS 魔王關卡<br><small style="color:#ff8888">巨型假新聞機器人來襲！投射假訊息攻擊！</small></div>
+      <div class="card-panel">
+        <div class="page-dots"><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot active"></div><div class="page-dot"></div></div>
+        <div style="font-family:'Noto Sans TC',sans-serif;font-weight:900;font-size:15px;color:#ff0090;text-align:center;margin-bottom:12px;text-shadow:0 0 8px #ff009088">⚡ 假新聞傳播目的 ⚡</div>
+        <div class="card-row"><span class="card-icon">💰</span><div class="card-text" style="font-size:13px">獲利<small>詐騙、假投資、飢餓行銷<br>以謠言騙取點擊或金錢</small></div></div>
+        <div class="card-row"><span class="card-icon">👁</span><div class="card-text" style="font-size:13px">曝光<small>內容農場、標題黨、恐慌謠言<br>誇大煽情衝點閱率</small></div></div>
+        <div class="card-row" style="margin-bottom:4px"><span class="card-icon">🗳</span><div class="card-text" style="font-size:13px">政治<small>抹黑、帶風向、陰謀論<br>影響輿論操控選舉</small></div></div>
+        <div class="btn-row">
+          <button class="nbtn" onclick="introPg(1)">← 返回</button>
+          <button class="nbtn" onclick="introPg(3)">下一頁 →</button>
         </div>
       </div>
-      <div style="display:flex;gap:14px;margin-top:18px">
-        <button class="next-btn" style="padding:12px 30px;font-size:15px" onclick="introPg(1)">← 返回</button>
-        <button class="next-btn" style="background:linear-gradient(90deg,#006622,#00aa44);border-color:#00ff88;box-shadow:0 0 20px #00ff8844" onclick="handleStart()">▶ 開始遊戲</button>
+    </div>
+    <!-- p3: levels -->
+    <div id="ip3" class="hidden">
+      <div class="card-panel">
+        <div class="page-dots"><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot"></div><div class="page-dot active"></div></div>
+        <div style="font-family:'Noto Sans TC',sans-serif;font-weight:900;font-size:15px;color:#00f0ff;text-align:center;margin-bottom:12px;text-shadow:0 0 8px #00f0ff88">📋 關卡總覽</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;margin-bottom:10px">
+          <div class="card-row" style="margin:0;gap:8px"><span style="font-size:18px">1️⃣</span><div class="card-text" style="font-size:12px">LV1　收復 2 個<small>基礎判讀入門</small></div></div>
+          <div class="card-row" style="margin:0;gap:8px"><span style="font-size:18px">2️⃣</span><div class="card-text" style="font-size:12px">LV2　收復 3 個<small>NPC 開始走動</small></div></div>
+          <div class="card-row" style="margin:0;gap:8px"><span style="font-size:18px">3️⃣</span><div class="card-text" style="font-size:12px">LV3　收復 4 個<small>出現真實新聞</small></div></div>
+          <div class="card-row" style="margin:0;gap:8px"><span style="font-size:18px">4️⃣</span><div class="card-text" style="font-size:12px">LV4　收復 5 個<small>更多真實新聞</small></div></div>
+        </div>
+        <div style="background:#2a000f;padding:8px 12px;border-radius:8px;border:1px solid #ff009055;display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <span style="font-size:22px">⚔️</span>
+          <div class="card-text" style="font-size:12px;color:#ff6699">LV5 BOSS 魔王關卡<small style="color:#ff9999">巨型機器人來襲！點擊 50 下擊倒它！</small></div>
+        </div>
+        <div class="btn-row">
+          <button class="nbtn" onclick="introPg(2)">← 返回</button>
+          <button class="nbtn green" onclick="handleStart()">▶ 開始遊戲</button>
+        </div>
       </div>
     </div>
   </div>
@@ -142,42 +156,35 @@ canvas{display:block;image-rendering:pixelated}
   <!-- Boss warn -->
   <div id="boss-warn" class="hidden"><div class="bw-text">⚠️ 注意 ⚠️<br>一大波假訊息即將投射！<br>小心！</div></div>
 
-  <!-- Judge panel -->
+  <!-- Judge panel (3 options only — removed 黑公關) -->
   <div id="judge-panel" class="hidden">
     <div class="jlabel">⚡ 這則訊息的目的是什麼？ ⚡</div>
     <div class="jtimer-wrap">
       <div class="jtimer-bar"><div id="jtimer-fill"></div></div>
-      <div id="judge-countdown">5</div>
+      <div id="judge-countdown">7</div>
     </div>
     <div id="jnews"><div id="jbadge"></div><div id="jtext"></div></div>
     <button class="jbtn" onclick="handleJudgeAnswer(0)"><span>💰 獲利</span><small>詐騙 / 飢餓行銷 / 假投資</small></button>
     <button class="jbtn" onclick="handleJudgeAnswer(1)"><span>👁 曝光</span><small>內容農場 / 標題黨 / 恐慌謠言</small></button>
     <button class="jbtn" onclick="handleJudgeAnswer(2)"><span>🗳 政治</span><small>抹黑 / 帶風向 / 陰謀論</small></button>
-    <button class="jbtn" onclick="handleJudgeAnswer(3)"><span>🛡 公關</span><small>黑公關 / 惡意競爭 / 假爆料</small></button>
   </div>
 
-  <!-- Burst overlay -->
+  <!-- Burst overlay — threshold click system -->
   <div id="burst-ov" class="hidden">
-    <div id="burst-hint">⚡ 狂按空白鍵 / 點擊 搶回主導權！</div>
-    <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-      <span style="color:#00f0ff;font-size:6px;font-family:'Press Start 2P',monospace">你的查核力 👊</span>
-      <span id="burst-npc-label" style="color:#ff4444;font-size:6px;font-family:'Press Start 2P',monospace">NPC 反擊中 💢</span>
+    <div id="burst-hint">⚡ 狂點滑鼠 / 空白鍵 收復！</div>
+    <div class="bcounter">
+      <div id="b-clicks">0</div>
+      <div class="b-slash">/</div>
+      <div id="b-target">3</div>
+      <div class="b-unit">下</div>
     </div>
-    <div class="burst-bar-wrap">
-      <div style="position:absolute;inset:0;background:linear-gradient(90deg,#00f0ff11,#ff000033);width:100%"></div>
-      <div id="burst-fill"></div>
-      <div style="position:absolute;left:50%;top:0;bottom:0;width:3px;background:#fff5;transform:translateX(-50%)"></div>
-      <div id="burst-heart" style="left:calc(50% - 10px)">💗</div>
+    <div class="bpbar"><div id="b-fill"></div></div>
+    <div class="bfooter">
+      <div id="b-timer">剩餘 3.0 秒</div>
+      <div id="b-remain">還差 3 下</div>
     </div>
-    <div style="display:flex;justify-content:space-between;margin-top:3px">
-      <span style="color:#00f0ff;font-size:5px">← 推到底即收復</span>
-      <span id="burst-speed-label" style="color:#ff8844;font-size:5px">Lv1 — 慢速反推</span>
-      <span style="color:#ff4444;font-size:5px">被推回 → 失敗</span>
-    </div>
-    <div id="burst-clicks">×0 按擊</div>
   </div>
 
-  <!-- Message -->
   <div id="msg"></div>
 
   <!-- Ending -->
@@ -185,12 +192,12 @@ canvas{display:block;image-rendering:pixelated}
     <h2 id="end-title" style="font-size:13px;text-align:center;margin-bottom:10px"></h2>
     <canvas id="end-canvas" width="300" height="200"></canvas>
     <p id="end-text" style="color:#fff;font-size:8px;text-align:center;line-height:2.4;margin:10px 0"></p>
-    <button class="next-btn" onclick="showIntro()">▶ 再來一次</button>
+    <button class="nbtn" onclick="showIntro()">▶ 再來一次</button>
   </div>
 </div>
 
 <script>
-/* ══ WEB AUDIO ══ */
+/* ══ AUDIO ══ */
 const AC=window.AudioContext||window.webkitAudioContext;
 let ac=null;
 function gac(){if(!ac)ac=new AC();if(ac.state==='suspended')ac.resume();return ac;}
@@ -206,8 +213,8 @@ function tone(f,t='square',d=0.1,g=0.25,del=0){
 function noise(d,g=0.3){
   const a=gac(),buf=a.createBuffer(1,a.sampleRate*d,a.sampleRate),dt=buf.getChannelData(0);
   for(let i=0;i<dt.length;i++)dt[i]=(Math.random()*2-1)*(1-i/dt.length);
-  const s=a.createBufferSource(),gn=a.createGain();
-  gn.gain.setValueAtTime(g,a.currentTime);s.buffer=buf;s.connect(gn);gn.connect(a.destination);s.start();s.stop(a.currentTime+d+0.01);
+  const src=a.createBufferSource(),gn=a.createGain();
+  gn.gain.setValueAtTime(g,a.currentTime);src.buffer=buf;src.connect(gn);gn.connect(a.destination);src.start();src.stop(a.currentTime+d+0.01);
 }
 const sfx={
   aim:()=>{tone(440,'sine',.05,.15);tone(660,'sine',.04,.1,.04)},
@@ -220,73 +227,72 @@ const sfx={
   bossDie:()=>{noise(.9,.8);[220,180,120,80,50].forEach((f,i)=>tone(f,'sawtooth',.3,.55,i*.12))},
   victory:()=>{[523,659,784,1047,1319,1568,1047,1319,1568,2093].forEach((f,i)=>tone(f,'square',.1,.28,i*.08))},
   defeat:()=>{[330,280,220,180,140,110].forEach((f,i)=>tone(f,'sawtooth',.18,.4,i*.12))},
-  burst:()=>{const a=gac(),o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.type='sawtooth';o.frequency.setValueAtTime(100,a.currentTime);o.frequency.linearRampToValueAtTime(900,a.currentTime+.35);g.gain.setValueAtTime(.18,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.35);o.start();o.stop(a.currentTime+.36)},
-  countdown:n=>{ if(n>1){tone(880,'square',.05,.4);tone(660,'square',.04,.2,.06);}else{tone(1200,'square',.06,.5);tone(1200,'square',.06,.5,.14);} }
+  countdown:n=>{if(n>1){tone(880,'square',.05,.4);tone(660,'square',.04,.2,.06);}else{tone(1200,'square',.06,.5);tone(1200,'square',.06,.5,.14);}}
 };
 
 /* ══ CONSTANTS ══ */
 const W=680,H=400,GROUND=310,GRAVITY=.5,SPEED=4,WW=3000;
 const LQUOTA=[2,3,4,5];
 const NPC_W=200,NPC_H=88;
-const JTIME=5; // judge seconds
+const JTIME=7;  // 7-second judge window
 
-/* ══ DATA ══ */
+// Burst thresholds: Lv1=3, Lv2=10, Lv3=15, Lv4=15, Boss=50
+const BURST_NEED=[3,10,15,15,50];
+const BURST_SECS=3; // seconds for Lv1-4; Boss is unlimited
+
+/* ══ NEWS DATA (ans:3 黑公關 removed — remapped to 0/1/2) ══ */
 const NEWS=[
-  {p:0,txt:'台大醫師提醒：\n每天空腹喝鹽水\n殺死99%癌細胞！\n快傳給關心的人！',ans:1,r:false,badge:'👁 LINE 內容農場',bc:'#22aa44',cc:'#001a08'},
-  {p:0,txt:'政府發放65歲以上\n每人6,000元補助\n今晚截止！點連結\n登記否則視同放棄',ans:0,r:false,badge:'💰 LINE 釣魚詐騙',bc:'#116622',cc:'#001505'},
-  {p:0,txt:'震驚！林志玲\n遭爆離婚！？\n日籍老公外遇曝光',ans:1,r:false,badge:'👁 LINE 標題黨',bc:'#22aa44',cc:'#001a08'},
-  {p:0,txt:'警告！明天起\n自來水管加氯量\n超標快囤水！',ans:1,r:false,badge:'👁 LINE 恐慌謠言',bc:'#22aa44',cc:'#001a08'},
-  {p:0,txt:'世衛警告：\n新型病毒致死率九成\n快點轉發給親友',ans:1,r:false,badge:'👁 LINE 恐慌謠言',bc:'#22aa44',cc:'#001a08'},
-  {p:0,txt:'【LINE TODAY】\n驚!朋友在醫院工作\n最近不要喝某超商\n大冰美式 含致癌物！',ans:1,r:false,badge:'👁 LINE TODAY 謠言',bc:'#22aa44',cc:'#001a08'},
-  {p:1,txt:'【DCARD】企管系\n許嘉文老師兒子\nBOYS II PLANET\n直拍 附YouTube連結\n請大家多按讚支持！',ans:-1,r:true,badge:'📢 DCARD 分享',bc:'#224466',cc:'#000a20'},
-  {p:1,txt:'【DCARD】木菊院怪人\n中正大學新NPC!\n｢金髮女｣四處偷\n數次遭逮 附採訪畫面\nTVBS新聞',ans:-1,r:true,badge:'📢 DCARD 新聞',bc:'#224466',cc:'#000a20'},
-  {p:1,txt:'藍寶快訊：陳時中\n被爆料私下貪污！\n獨家帳單照片流出',ans:2,r:false,badge:'🗳 DCARD 政治抹黑',bc:'#1155cc',cc:'#000a20'},
-  {p:1,txt:'【投資秘訣】知名\n藝人力推的神秘股票\n加LINE馬上致富',ans:0,r:false,badge:'💰 DCARD 投資詐騙',bc:'#224499',cc:'#00081a'},
-  {p:1,txt:'驚爆！馬斯克\n宣佈將買下台積電？\n在台設超級工廠',ans:1,r:false,badge:'👁 DCARD 誇大標題',bc:'#224499',cc:'#00081a'},
-  {p:1,txt:'抵制！某連鎖\n手搖飲被爆使用茶精\n內部對話截圖流出',ans:3,r:false,badge:'🛡 DCARD 商業抹黑',bc:'#335599',cc:'#000a1a'},
-  {p:1,txt:'【DCARD】企管系主任宣布\n中正大學明日颱風假\n停課一天!',ans:1,r:false,badge:'👁 DCARD 假公告謠言',bc:'#224499',cc:'#00081a'},
-  {p:2,txt:'【Threads】爆料：\n朋友在IKEA打工\n他說閉店前展示櫃\n都可以直接拿',ans:1,r:false,badge:'👁 Threads 假爆料',bc:'#555555',cc:'#101010'},
-  {p:2,txt:'【Instagram Reels】\n洗澡🛁的順序\n關乎生命?',ans:1,r:false,badge:'👁 IG Reels 標題黨',bc:'#cc44aa',cc:'#1a0010'},
-  {p:2,txt:'【YouTube Shorts】\n沒開刀癌細胞\n自己消失?\n公開1+1天然抗癌！',ans:0,r:false,badge:'💰 YT Shorts 偽健康',bc:'#cc2200',cc:'#1a0000'},
-  {p:2,txt:'【YouTube】愛莉莎莎：\n喝橄欖油可以幫助\n排膽結石?',ans:1,r:false,badge:'👁 YT 偽科學內容',bc:'#cc2200',cc:'#1a0000'},
-  {p:2,txt:'【YouTube Shorts】\n親人遺物這四樣\n絕對不能留!\n別讓兒孫倒楣',ans:1,r:false,badge:'👁 YT Shorts 迷信恐嚇',bc:'#cc2200',cc:'#1a0000'},
-  {p:2,txt:'氣象局內部透露：\n今晚史上最強地震\n請大家不要睡覺\n趕快準備避難包！',ans:1,r:false,badge:'👁 Threads 恐慌謠言',bc:'#555555',cc:'#101010'},
-  {p:2,txt:'【Threads】限時3小時！\n網紅推薦的App\n點此下載超稀有功能',ans:0,r:false,badge:'💰 Threads 飢餓行銷',bc:'#444444',cc:'#0a0a0a'},
-  {p:0,txt:'中央氣象署預報\n低氣壓影響鋒面接近\n各地局部陣雨雷雨',ans:-1,r:true,badge:'📢 LINE TODAY 氣象',bc:'#226644',cc:'#001a08'},
-  {p:1,txt:'台灣首位奧運\n拳擊金牌林郁婷\n確認出席全運會',ans:-1,r:true,badge:'📢 DCARD 體育新聞',bc:'#224466',cc:'#000a20'},
-  {p:2,txt:'文化部新政策\n短影音平台需\n標示AI合成內容',ans:-1,r:true,badge:'📢 Threads 政策',bc:'#334455',cc:'#0d0d0d'},
-  {p:2,txt:'微軟證實\nCrowdStrike更新出錯\n全球當機已修復',ans:-1,r:true,badge:'📢 Threads 科技',bc:'#334455',cc:'#0d0d0d'},
-  {p:1,txt:'【DCARD】市政府已經\n內部決定明天停班停課\n只是還沒公布，\n大家可以放心安排',ans:1,r:false,badge:'📱 DCARD',bc:'#224499',cc:'#00081a'},
-  {p:2,txt:'【Threads】我朋友\n在IKEA打工，他說\n閉店前展示櫃\n都可以直接拿',ans:1,r:false,badge:'📱 Threads',bc:'#444444',cc:'#0a0a0a'},
-  {p:0,txt:'【LINE】朋友在醫院工作\n提醒大家最近不要喝\n某超商的大冰美式\n檢驗發現含有致癌物！',ans:1,r:false,badge:'📱 LINE',bc:'#22aa44',cc:'#001a08'},
+  {p:0,txt:'台大醫師提醒：\n每天空腹喝鹽水\n殺死99%癌細胞！\n快傳給關心的人！',ans:1,r:false,badge:'LINE'},
+  {p:0,txt:'政府發放65歲以上\n每人6,000元補助\n今晚截止！點連結\n登記否則視同放棄',ans:0,r:false,badge:'LINE'},
+  {p:0,txt:'震驚！林志玲\n遭爆離婚！？\n日籍老公外遇曝光',ans:1,r:false,badge:'LINE'},
+  {p:0,txt:'警告！明天起\n自來水管加氯量\n超標快囤水！',ans:1,r:false,badge:'LINE'},
+  {p:0,txt:'世衛警告：\n新型病毒致死率九成\n快點轉發給親友',ans:1,r:false,badge:'LINE'},
+  {p:0,txt:'【LINE TODAY】\n朋友在醫院工作\n最近不要喝某超商\n大冰美式 含致癌物！',ans:1,r:false,badge:'LINE'},
+  {p:1,txt:'【DCARD】企管系\n許嘉文老師兒子\nBOYS II PLANET\n直拍 附YouTube連結\n請大家多按讚支持！',ans:-1,r:true,badge:'DCARD'},
+  {p:1,txt:'【DCARD】木菊院怪人\n中正大學新NPC!\n｢金髮女｣四處偷\n數次遭逮 附採訪畫面\nTVBS新聞',ans:-1,r:true,badge:'DCARD'},
+  {p:1,txt:'藍寶快訊：陳時中\n被爆料私下貪污！\n獨家帳單照片流出',ans:2,r:false,badge:'DCARD'},
+  {p:1,txt:'【投資秘訣】知名\n藝人力推的神秘股票\n加LINE馬上致富',ans:0,r:false,badge:'DCARD'},
+  {p:1,txt:'驚爆！馬斯克\n宣佈將買下台積電？\n在台設超級工廠',ans:1,r:false,badge:'DCARD'},
+  {p:1,txt:'【DCARD】企管系主任宣布\n中正大學明日颱風假\n停課一天!',ans:1,r:false,badge:'DCARD'},
+  {p:1,txt:'【DCARD】市政府已經\n內部決定明天停班停課\n只是還沒公布\n大家可以放心安排',ans:1,r:false,badge:'DCARD'},
+  {p:2,txt:'【Threads】爆料：\n朋友在IKEA打工\n他說閉店前展示櫃\n都可以直接拿',ans:1,r:false,badge:'Threads'},
+  {p:2,txt:'【Instagram Reels】\n洗澡🛁的順序\n關乎生命?',ans:1,r:false,badge:'Threads'},
+  {p:2,txt:'【YouTube Shorts】\n沒開刀癌細胞\n自己消失?\n公開1+1天然抗癌！',ans:0,r:false,badge:'Threads'},
+  {p:2,txt:'【YouTube】愛莉莎莎：\n喝橄欖油可以幫助\n排膽結石?',ans:1,r:false,badge:'Threads'},
+  {p:2,txt:'【YouTube Shorts】\n親人遺物這四樣\n絕對不能留!\n別讓兒孫倒楣',ans:1,r:false,badge:'Threads'},
+  {p:2,txt:'氣象局內部透露：\n今晚史上最強地震\n請大家不要睡覺\n趕快準備避難包！',ans:1,r:false,badge:'Threads'},
+  {p:2,txt:'【Threads】限時3小時！\n網紅推薦的App\n點此下載超稀有功能',ans:0,r:false,badge:'Threads'},
+  {p:0,txt:'中央氣象署預報\n低氣壓影響鋒面接近\n各地局部陣雨雷雨',ans:-1,r:true,badge:'LINE'},
+  {p:1,txt:'台灣首位奧運\n拳擊金牌林郁婷\n確認出席全運會',ans:-1,r:true,badge:'DCARD'},
+  {p:2,txt:'文化部新政策\n短影音平台需\n標示AI合成內容',ans:-1,r:true,badge:'Threads'},
+  {p:2,txt:'微軟證實\nCrowdStrike更新出錯\n全球當機已修復',ans:-1,r:true,badge:'Threads'},
 ];
 const BOSS_NEWS=[
-  {p:0,txt:'【緊急】衛福部宣布\n今起禁止外食!\n快囤積食材\n限時48小時',ans:1,r:false,badge:'⚡ BOSS 恐慌謠言',bc:'#ff0000',cc:'#1a0000'},
-  {p:1,txt:'【DCARD爆料】\n政府秘密在疫苗\n植入追蹤晶片\n附內部文件截圖',ans:2,r:false,badge:'⚡ BOSS 陰謀論',bc:'#ff4400',cc:'#1a0800'},
-  {p:2,txt:'【IG Reels】\n這個祕密療法\n7天治好糖尿病\n醫生不想讓你知道',ans:0,r:false,badge:'⚡ BOSS 偽醫療',bc:'#ff0090',cc:'#1a0010'},
-  {p:0,txt:'【LINE】股神預言：\n台股明天崩盤!\n快把錢換成美金\n只剩24小時!',ans:0,r:false,badge:'⚡ BOSS 金融詐騙',bc:'#ff6600',cc:'#1a0800'},
-  {p:2,txt:'【Threads】爆！台積電\n即將宣布倒閉?\n內部員工匿名\n附聊天截圖',ans:1,r:false,badge:'⚡ BOSS 假財經',bc:'#ff2200',cc:'#1a0000'},
-  {p:1,txt:'侯友宜出席\n新北市防災演習\n完成指揮協調',ans:-1,r:true,badge:'📢 DCARD 新聞',bc:'#224466',cc:'#000a20'},
+  {p:0,txt:'【緊急】衛福部宣布\n今起禁止外食!\n快囤積食材\n限時48小時',ans:1,r:false,badge:'LINE'},
+  {p:1,txt:'【DCARD爆料】\n政府秘密在疫苗\n植入追蹤晶片\n附內部文件截圖',ans:2,r:false,badge:'DCARD'},
+  {p:2,txt:'【IG Reels】\n這個祕密療法\n7天治好糖尿病\n醫生不想讓你知道',ans:0,r:false,badge:'Threads'},
+  {p:0,txt:'【LINE】股神預言：\n台股明天崩盤!\n快把錢換成美金\n只剩24小時!',ans:0,r:false,badge:'LINE'},
+  {p:2,txt:'【Threads】爆！台積電\n即將宣布倒閉?\n內部員工匿名\n附聊天截圖',ans:1,r:false,badge:'Threads'},
+  {p:1,txt:'侯友宜出席\n新北市防災演習\n完成指揮協調',ans:-1,r:true,badge:'DCARD'},
 ];
 const PLBL=['LINE','DCARD','Threads'];
+const PCOL=['#00cc44','#1155cc','#555555'];
 const NSTY=[
   {body:'#0d6e2a',acc:'#2ecc52',skin:'#f5c896',hair:'#3a1a00',lbl:'#2ecc52'},
   {body:'#0a2a8c',acc:'#4488ff',skin:'#f8d5a0',hair:'#1a0800',lbl:'#4488ff'},
   {body:'#111111',acc:'#cccccc',skin:'#f0c888',hair:'#111111',lbl:'#cccccc'},
 ];
-const PCOL=['#00cc44','#1155cc','#333333'];
 
 /* ══ STATE ══ */
 let S=null,phase='intro',animId=null,bossWarnShown=false;
 let judgeNPC=null,jInterval=null,jT=JTIME;
-// fire canvas
 const fireCV=document.getElementById('fire-canvas');
 const fctx=fireCV.getContext('2d');
 let fireOn=false,fireAnim=null;
 
 /* ══ INTRO ══ */
 function introPg(n){
-  [0,1,2].forEach(i=>document.getElementById('ip'+i).classList.toggle('hidden',i!==n));
+  [0,1,2,3].forEach(i=>document.getElementById('ip'+i).classList.toggle('hidden',i!==n));
 }
 function showIntro(){
   document.getElementById('intro').classList.remove('hidden');
@@ -294,17 +300,28 @@ function showIntro(){
   document.getElementById('hud').style.display='none';
   introPg(0);
 }
+// Enter key to advance intro
+window.addEventListener('keydown',e=>{
+  if(phase!=='intro')return;
+  if(e.key==='Enter'){
+    for(let i=0;i<4;i++){
+      const el=document.getElementById('ip'+i);
+      if(el&&!el.classList.contains('hidden')){
+        if(i<3)introPg(i+1);
+        else handleStart();
+        return;
+      }
+    }
+  }
+});
 
-/* ══ FIRE BACKGROUND ══ */
+/* ══ FIRE ══ */
 function startFire(){
   fireOn=true;fireCV.style.opacity='0.55';
-  const W2=680,H2=400;
-  const buf=new Uint8Array(W2*H2);
+  const W2=680,H2=400,buf=new Uint8Array(W2*H2);
   function step(){
     if(!fireOn){fctx.clearRect(0,0,W2,H2);return;}
-    // seed bottom row
     for(let x=0;x<W2;x++)buf[(H2-1)*W2+x]=Math.random()>.45?255:0;
-    // spread upward
     for(let y=H2-2;y>=0;y--){
       for(let x=0;x<W2;x++){
         const s=buf[(y+1)*W2+((x-1+W2)%W2)]+buf[(y+1)*W2+x]+buf[(y+1)*W2+((x+1)%W2)]+buf[Math.min(y+2,H2-1)*W2+x];
@@ -314,20 +331,16 @@ function startFire(){
     const id=fctx.createImageData(W2,H2);
     for(let i=0;i<W2*H2;i++){
       const v=buf[i];
-      id.data[i*4]=(v>200)?255:(v>100)?255:Math.min(255,v*2);
+      id.data[i*4]=(v>200)?255:Math.min(255,v*2);
       id.data[i*4+1]=(v>200)?Math.floor((v-200)*1.4):0;
-      id.data[i*4+2]=0;
-      id.data[i*4+3]=v;
+      id.data[i*4+2]=0;id.data[i*4+3]=v;
     }
     fctx.putImageData(id,0,0);
     fireAnim=requestAnimationFrame(step);
   }
   step();
 }
-function stopFire(){
-  fireOn=false;fireCV.style.opacity='0';
-  if(fireAnim)cancelAnimationFrame(fireAnim);
-}
+function stopFire(){fireOn=false;fireCV.style.opacity='0';if(fireAnim)cancelAnimationFrame(fireAnim);}
 
 /* ══ GAME STATE ══ */
 function mkState(){
@@ -338,17 +351,16 @@ function mkState(){
     boss:false,bossHP:5,bossDead:false,bossDeadTick:0,bossFalling:false,
     bossX:W+60,bossTX:W*.68,bossIn:false,
     bossQ:[],bossSpawn:120,bossWarnT:0,bossWarnDone:false,
-    burst:false,burstT:null,burstClicks:0,burstTimer:0,burstBar:.5,
+    burst:false,burstT:null,burstClicks:0,burstTimer:0,burstNeeded:3,burstIsBoss:false,
     judging:false,stunned:false,stunT:0,parts:[],msg:null,msgT:0,
-    autoJudgeT:0, // for boss auto-open judge
+    wrongCount:0,recentTxts:[],
   };
 }
 function mkNPC(t,wx){
   return{wx,y:GROUND-NPC_H-4,w:NPC_W,h:NPC_H,
-    txt:t.txt,ans:t.ans,real:t.r,p:t.p,badge:t.badge,bc:t.bc,cc:t.cc,
+    txt:t.txt,ans:t.ans,real:t.r,p:t.p,badge:t.badge,
     hp:1,captured:false,rec:false,flash:0,glow:Math.random()*Math.PI*2,
-    wdir:-1,wspd:0,ghX:undefined,ghY:undefined,drop:false,dropY:-NPC_H,
-    autoOpen:false, // boss NPC: auto-trigger judge on land
+    wdir:-1,wspd:0,ghX:undefined,ghY:undefined,drop:false,dropY:-NPC_H,autoOpen:false,
   };
 }
 function spawnNPC(s){
@@ -356,23 +368,21 @@ function spawnNPC(s){
   const real=NEWS.filter(n=>n.r);
   let pool=fake;
   if(s.lvl>=3){const rc=s.lvl===3?.25:.35;pool=(Math.random()<rc&&real.length)?real:fake;}
-  const t=pool[Math.floor(Math.random()*pool.length)];
+  const recent=s.recentTxts||[];
+  let cands=pool.filter(n=>!recent.includes(n.txt));
+  if(!cands.length)cands=pool;
+  const t=cands[Math.floor(Math.random()*cands.length)];
+  s.recentTxts=[...recent.slice(-3),t.txt];
   const sp=Math.max(240,380-s.lvl*20)+Math.random()*120;
-  // Spread NPCs so they don't overlap: ensure minimum distance from existing
-  let wx=s.nextSpawnX;
-  s.nextSpawnX+=sp;
-  // Separate NPCs that are too close
+  let wx=s.nextSpawnX;s.nextSpawnX+=sp;
   const active=s.npcs.filter(n=>n.hp>0&&!n.rec);
-  for(const ex of active){
-    if(Math.abs(ex.wx-wx)<NPC_W+30){wx=Math.max(ex.wx+NPC_W+60,wx);}
-  }
+  for(const ex of active){if(Math.abs(ex.wx-wx)<NPC_W+30)wx=Math.max(ex.wx+NPC_W+60,wx);}
   s.npcs.push(mkNPC(t,wx));
 }
 
 /* ══ UPDATE ══ */
 function update(s){
   s.tick++;s.elapsed++;
-  // Boss warning phase
   if(s.lvl===5&&!s.boss&&!s.bossWarnDone){
     s.bossWarnT++;
     if(s.bossWarnT===1&&!bossWarnShown){
@@ -389,10 +399,10 @@ function update(s){
     }
     updParts(s);return;
   }
-  if(s.rep<=0){endGame(false);return;}
+  if(s.rep<=0){endGame(false,'rep');return;}
   if(s.boss&&s.bossDead&&s.bossDeadTick>160){endGame(true);return;}
   if(s.stunned){if(--s.stunT<=0)s.stunned=false;updParts(s);if(s.boss)updBoss(s);return;}
-  // Player
+  // Player movement
   const off=s.mx-W/2,dz=18;let mv=0;
   if(Math.abs(off)>dz){mv=Math.sign(off)*Math.min(Math.abs(off)/(W/2)*SPEED*2.2,SPEED*2.2);s.pdir=Math.sign(off);}
   s.pvx=mv;s.px+=s.pvx;s.pvy+=GRAVITY;s.py+=s.pvy;
@@ -402,10 +412,11 @@ function update(s){
   // Level up
   if(!s.boss&&s.lvl<5&&s.lqLeft<=0){
     s.lvl++;s.lqLeft=LQUOTA[Math.min(s.lvl-1,LQUOTA.length-1)];
+    s.recentTxts=[];
     s.msg=s.lvl<5?'★ LEVEL UP! LV.'+s.lvl+' ★':'⚠ BOSS LEVEL！';s.msgT=120;
     sfx.lvup();if(s.lvl===5)s.bossWarnT=0;
   }
-  // NPC walk (lv2+)
+  // NPC walk lv2+
   if(s.lvl>=2){
     const active=s.npcs.filter(n=>n.hp&&!n.rec);
     for(let i=0;i<active.length;i++){
@@ -413,13 +424,9 @@ function update(s){
       n.wx+=n.wdir*n.wspd;
       if(n.wx<20){n.wx=20;n.wdir=1;}
       if(n.wx>WW-NPC_W-20)n.wdir=-1;
-      // Separate overlapping NPCs
       for(let j=i+1;j<active.length;j++){
         const m=active[j];const dist=m.wx-n.wx;
-        if(Math.abs(dist)<NPC_W+20){
-          const push=(NPC_W+20-Math.abs(dist))*.5;
-          n.wx-=push*(dist>0?1:-1);m.wx+=push*(dist>0?1:-1);
-        }
+        if(Math.abs(dist)<NPC_W+20){const push=(NPC_W+20-Math.abs(dist))*.5;n.wx-=push*(dist>0?1:-1);m.wx+=push*(dist>0?1:-1);}
       }
     }
   }
@@ -433,24 +440,20 @@ function update(s){
     if(s.nextSpawnX<s.px+W*.5)s.nextSpawnX=s.px+W*.6+Math.random()*80;
   }
   if(s.boss)updBoss(s);
-  // NPC glow & drop
+  // NPC tick
   for(const n of s.npcs){
     n.glow+=.07;if(n.flash>0)n.flash--;
     if(n.drop){
       const prev=n.dropY;n.dropY=Math.min(0,n.dropY+16);
-      if(n.dropY>=0&&prev<0){sfx.bossLand();
-        // Boss NPC: auto-trigger judge after short delay
+      if(n.dropY>=0&&prev<0){
+        sfx.bossLand();
         if(n.autoOpen&&!s.judging&&!s.burst){
-          setTimeout(()=>{
-            if(n.hp&&!n.rec&&!s.judging&&!s.burst){
-              n.captured=true;openJudge(n);
-            }
-          },400);
+          setTimeout(()=>{if(n.hp&&!n.rec&&!s.judging&&!s.burst){n.captured=true;openJudge(n);}},400);
         }
       }
     }
   }
-  // Passed-by
+  // Off-screen
   for(const n of s.npcs){
     if(!n.rec&&n.hp&&n.wx+n.w<s.camX-60){
       if(!n.real){s.rep=Math.max(0,s.rep-10);s.msg='⚡ 謠言漏網！-10';s.msgT=60;}
@@ -458,14 +461,32 @@ function update(s){
     }
   }
   s.npcs=s.npcs.filter(n=>n.hp||n.rec);
-  // Burst tug-of-war: NPC pressure scales with level (等差上升)
-  // Break-even clicks/sec: Lv1≈8, Lv2≈11, Lv3≈14, Lv4≈18, Lv5≈23
+  // ── BURST: threshold system ──
+  // Lv1-4: must reach burstNeeded clicks within BURST_SECS seconds
+  // Boss: must reach 50 clicks total (no time limit)
   if(s.burst){
-    const pressure=0.006+(s.lvl-1)*0.002;
-    s.burstBar=Math.max(0,s.burstBar-pressure);
-    s.burstTimer--;
-    if(s.burstBar<=0||s.burstTimer<=0){failBurst();}
-    else if(s.burstBar>=1.0){finishBurst();}
+    if(!s.burstIsBoss){
+      s.burstTimer--;
+      const timeLeft=Math.max(0,s.burstTimer/60);
+      const tl=document.getElementById('b-timer');
+      if(tl)tl.textContent='剩餘 '+timeLeft.toFixed(1)+' 秒';
+      // Check success first, then timeout
+      if(s.burstClicks>=s.burstNeeded){finishBurst();}
+      else if(s.burstTimer<=0){failBurst();}
+    } else {
+      // Boss mode: no timer, just need 50 clicks
+      const tl=document.getElementById('b-timer');
+      if(tl)tl.textContent='擊倒Boss！';
+      if(s.burstClicks>=50){finishBurst();}
+    }
+    // Update burst UI
+    const pct=Math.min(1,s.burstClicks/s.burstNeeded);
+    const bf=document.getElementById('b-fill');
+    if(bf)bf.style.width=(pct*100)+'%';
+    const bc=document.getElementById('b-clicks');
+    if(bc)bc.textContent=s.burstClicks;
+    const br=document.getElementById('b-remain');
+    if(br){const rem=Math.max(0,s.burstNeeded-s.burstClicks);br.textContent=rem>0?'還差 '+rem+' 下':'達標！';if(rem===0&&br.style)br.style.color='#00ff88';}
   }
   // Ghost follow
   for(let i=0;i<s.rec.length;i++){
@@ -475,11 +496,10 @@ function update(s){
   }
   if(s.msgT>0)s.msgT--;
   updParts(s);
-  // Boss dead animation
-  if(s.boss&&s.bossDead){s.bossDeadTick++;}
+  if(s.boss&&s.bossDead)s.bossDeadTick++;
 }
 function updBoss(s){
-  if(s.bossDead){return;}
+  if(s.bossDead)return;
   if(!s.bossIn){
     s.bossX-=1.5;
     if(s.tick%35===0)sfx.bossStep();
@@ -488,8 +508,7 @@ function updBoss(s){
   if(s.bossIn){
     const ac=s.npcs.filter(n=>n.hp&&!n.rec).length;
     if(ac===0&&s.bossQ.length>0){
-      s.bossSpawn--;
-      if(s.bossSpawn<=0){
+      if(--s.bossSpawn<=0){
         const t=s.bossQ.shift();
         const dwx=(s.bossX+s.camX)-NPC_W/2;
         const npc=mkNPC(t,Math.max(40,dwx));
@@ -509,11 +528,9 @@ function updParts(s){
 }
 function spawnParts(wx,wy,n=16){
   for(let i=0;i<n;i++){
-    S.parts.push({x:wx,y:wy,wx:wx,wy:wy,
-      vx:(Math.random()-.5)*9,vy:(Math.random()-1)*8,
+    S.parts.push({x:wx,y:wy,wx,wy,vx:(Math.random()-.5)*9,vy:(Math.random()-1)*8,
       life:30+Math.random()*25,sz:3+Math.random()*4,
-      col:['#ff0090','#00f0ff','#ffff00','#ff8800','#00ff88'][Math.floor(Math.random()*5)]
-    });
+      col:['#ff0090','#00f0ff','#ffff00','#ff8800','#00ff88'][Math.floor(Math.random()*5)]});
   }
 }
 
@@ -547,14 +564,24 @@ function render(s){
     cx.fillStyle='#ffff00';cx.font='bold 11px "Press Start 2P",monospace';cx.textAlign='center';
     cx.shadowColor='#ffff00';cx.shadowBlur=8;cx.fillText(s.msg,W/2,GROUND-22);cx.shadowBlur=0;cx.globalAlpha=1;
   }
-  // Rep bar
   const rr=Math.max(0,(s.rep||0)/100);
   cx.fillStyle='#1a1a2e';cx.fillRect(20,H-14,W-40,6);
   const rg=cx.createLinearGradient(20,0,W-20,0);
   rg.addColorStop(0,rr>.5?'#00ff88':'#ff8800');rg.addColorStop(1,rr>.25?'#ffff00':'#ff0000');
   cx.fillStyle=rg;cx.fillRect(20,H-14,(W-40)*rr,6);
   cx.strokeStyle='#00f0ff44';cx.lineWidth=.5;cx.strokeRect(20,H-14,W-40,6);
-  updHUD(s);
+  // HUD
+  const hl=document.getElementById('hl');
+  if(hl)hl.innerHTML='分數:'+s.score+'<br>'+(s.boss?'<span style="color:#ff0000">BOSS HP:'+'♥'.repeat(Math.max(0,s.bossHP))+'</span>':'LV.'+s.lvl+' 剩:'+s.lqLeft);
+  const hc=document.getElementById('hc');if(hc)hc.innerHTML='LV.'+s.lvl;
+  const hr=document.getElementById('h-rec');if(hr)hr.textContent=s.rec.length;
+  const rf=document.getElementById('rep-fill');if(rf){rf.style.width=s.rep+'%';rf.style.background=s.rep>50?'#0f0':s.rep>25?'#ff0':'#f00';}
+  if(s.burst){
+    document.getElementById('burst-ov').classList.remove('hidden');
+    document.getElementById('b-target').textContent=s.burstNeeded;
+  }else{
+    document.getElementById('burst-ov').classList.add('hidden');
+  }
 }
 
 function drawBG(s,cam){
@@ -597,7 +624,7 @@ function drawPlayer(s){
   cx.fillStyle='#f0c888';cx.fillRect(-8,-64,16,20);
   cx.fillStyle='#1a0800';cx.fillRect(-9,-68,18,12);cx.fillRect(-11,-64,4,8);cx.fillRect(8,-68,4,10);
   cx.fillStyle='#f0c888';cx.fillRect(-12,-58,4,8);cx.fillRect(8,-58,4,8);
-  cx.strokeStyle='#888';cx.lineWidth=1.5;cx.shadowBlur=0;
+  cx.strokeStyle='#888';cx.lineWidth=1.5;
   cx.beginPath();cx.arc(-4,-53,4,0,Math.PI*2);cx.stroke();cx.fillStyle='#00f0ff22';cx.fill();
   cx.beginPath();cx.arc(4,-53,4,0,Math.PI*2);cx.stroke();cx.fillStyle='#00f0ff22';cx.fill();
   cx.strokeStyle='#888';cx.lineWidth=1;
@@ -616,434 +643,152 @@ function drawGhost(g,sx,sy,s){
   cx.fillStyle=st.lbl;cx.font='bold 5px "Press Start 2P",monospace';cx.textAlign='center';cx.fillText(PLBL[g.p],0,-22);
   cx.restore();cx.globalAlpha=1;
 }
-function drawNPCSpr(e,sx,s,dy){
-  const st=NSTY[e.p],bx=sx+e.w/2;
-  const fy=e.y-52+Math.sin(s.tick*.04+e.glow)*3+(dy||0);
-  cx.save();cx.translate(bx,fy);
-  cx.fillStyle='rgba(0,0,0,.22)';cx.beginPath();cx.ellipse(0,42,14,3,0,0,Math.PI*2);cx.fill();
-  if(e.p===0)drawLINEnpc(st,s.tick);
-  else if(e.p===1)drawDCnpc(st,s.tick);
-  else drawTHnpc(st,s.tick);
-  cx.fillStyle=st.lbl;cx.font='bold 6px "Press Start 2P",monospace';cx.textAlign='center';
-  cx.shadowColor=st.lbl;cx.shadowBlur=4;cx.fillText(PLBL[e.p],0,-52);cx.shadowBlur=0;
-  cx.restore();
-}
-function drawLINEnpc(st,t){
-  // LINE: 中年男女，簡單綠色上衣
-  const w=Math.sin(t*.08)*1.5;
-  // 腿
-  cx.fillStyle='#333';cx.fillRect(-7,18+w,6,20);cx.fillRect(2,18-w,6,20);
-  cx.fillStyle='#555';cx.fillRect(-8,36+w,9,5);cx.fillRect(1,36-w,9,5);
-  // 綠色上衣（簡單）
-  cx.fillStyle=st.body;cx.fillRect(-12,-8,24,28);
-  // 領子
-  cx.fillStyle='#fff';cx.fillRect(-4,-8,8,7);
-  // 袖子
-  cx.fillStyle=st.body;cx.fillRect(-17,-6,6,16);cx.fillRect(11,-6,6,16);
-  cx.fillStyle=st.skin;cx.fillRect(-17,8,6,8);cx.fillRect(11,8,6,8);
-  // 頭（橢圓）
-  cx.fillStyle=st.skin;cx.beginPath();cx.ellipse(0,-20,11,13,0,0,Math.PI*2);cx.fill();
-  // 頭髮（深褐，中年髮型）
-  cx.fillStyle='#3a2a00';cx.beginPath();cx.arc(0,-27,11,Math.PI,0);cx.fill();cx.fillRect(-11,-27,22,5);
-  // 眼睛
-  cx.fillStyle='#222';cx.fillRect(-5,-22,4,4);cx.fillRect(1,-22,4,4);
-  cx.fillStyle='#fff';cx.fillRect(-4,-22,2,2);cx.fillRect(2,-22,2,2);
-  // 嘴
-  cx.fillStyle='#a04020';cx.fillRect(-4,-13,8,2);
-}
-function drawDCnpc(st,t){
-  // FB: 藍色簡單上衣，中年男女
-  const w=Math.sin(t*.10)*1.5;
-  // 腿（深藍褲）
-  cx.fillStyle='#1a2a5a';cx.fillRect(-7,18+w,6,22);cx.fillRect(2,18-w,6,22);
-  cx.fillStyle='#eee';cx.fillRect(-8,38+w,9,5);cx.fillRect(1,38-w,9,5);
-  // 藍色上衣（簡單）
-  cx.fillStyle=st.body;cx.fillRect(-12,-8,24,28);
-  // 白領子
-  cx.fillStyle='#ddeeff';cx.fillRect(-4,-8,8,7);
-  // 袖子
-  cx.fillStyle=st.body;cx.fillRect(-17,-6,6,16);cx.fillRect(11,-6,6,16);
-  cx.fillStyle=st.skin;cx.fillRect(-17,8,6,8);cx.fillRect(11,8,6,8);
-  // 頭
-  cx.fillStyle=st.skin;cx.beginPath();cx.ellipse(0,-22,10,13,0,0,Math.PI*2);cx.fill();
-  // 頭髮
-  cx.fillStyle=st.hair;cx.beginPath();cx.arc(0,-28,11,Math.PI,0);cx.fill();cx.fillRect(-11,-31,22,8);
-  // 眼鏡（FB中年風格）
-  cx.strokeStyle='#888';cx.lineWidth=1;
-  cx.beginPath();cx.arc(-4,-25,3,0,Math.PI*2);cx.stroke();
-  cx.beginPath();cx.arc(4,-25,3,0,Math.PI*2);cx.stroke();
-  cx.beginPath();cx.moveTo(-1,-25);cx.lineTo(1,-25);cx.stroke();
-  // 眼睛
-  cx.fillStyle='#222';cx.fillRect(-5,-26,2,2);cx.fillRect(3,-26,2,2);
-  // 嘴
-  cx.fillStyle='#c06030';cx.fillRect(-3,-15,6,2);
-}
-function drawTHnpc(st,t){
-  // Threads: 黑色T恤，年輕人
-  const w=Math.sin(t*.12)*1.5;
-  // 黑色窄版長褲
-  cx.fillStyle='#111';cx.fillRect(-6,18+w,5,22);cx.fillRect(2,18-w,5,22);
-  // 白球鞋
-  cx.fillStyle='#eee';cx.fillRect(-7,38+w,8,5);cx.fillRect(1,38-w,8,5);
-  cx.fillStyle='#ccc';cx.fillRect(-7,38+w,8,2);cx.fillRect(1,38-w,8,2);
-  // 黑色T恤（簡單）
-  cx.fillStyle='#111';cx.fillRect(-11,-8,22,28);
-  // T恤領口
-  cx.fillStyle='#222';cx.fillRect(-4,-8,8,5);
-  // 袖子（短袖）
-  cx.fillStyle='#111';cx.fillRect(-15,-6,5,10);cx.fillRect(10,-6,5,10);
-  cx.fillStyle=st.skin;cx.fillRect(-15,2,5,10);cx.fillRect(10,2,5,10);
-  // 頭
-  cx.fillStyle=st.skin;cx.beginPath();cx.ellipse(0,-22,10,12,0,0,Math.PI*2);cx.fill();
-  // 黑色短髮
-  cx.fillStyle='#111';cx.beginPath();cx.arc(0,-28,11,Math.PI,0);cx.fill();cx.fillRect(-11,-30,22,7);
-  // 眼睛（細長冷漠眼）
-  cx.fillStyle='#222';cx.fillRect(-5,-24,4,2);cx.fillRect(1,-24,4,2);
-  cx.fillStyle='#aaa';cx.fillRect(-4,-24,2,1);cx.fillRect(2,-24,2,1);
-  // 嘴（一字）
-  cx.fillStyle='#5a3a10';cx.fillRect(-3,-15,6,2);
-}
-function drawNPCSprLeft(e,sx,s,dy){
-  // Position NPC to the LEFT of the card, 36px gap, centered vertically on card
-  const npcX = sx - 44;  // left of card
-  const npcY = e.y + (e.h/2) - 20 + (dy||0); // vertically centered on card
-  const st=NSTY[e.p];
-  cx.save();cx.translate(npcX, npcY);
-  cx.fillStyle='rgba(0,0,0,.18)';cx.beginPath();cx.ellipse(0,28,11,3,0,0,Math.PI*2);cx.fill();
-  if(e.p===0) drawLINEnpc(st,s.tick);
-  else if(e.p===1) drawDCnpc(st,s.tick);
-  else drawTHnpc(st,s.tick);
-  // Platform label above NPC
-  cx.fillStyle=st.lbl;cx.font='bold 5px "Press Start 2P",monospace';cx.textAlign='center';
-  cx.shadowColor=st.lbl;cx.shadowBlur=3;cx.fillText(PLBL[e.p],0,-44);cx.shadowBlur=0;
+function drawNPCSpr(sx,e,s,dy){
+  const st=NSTY[e.p],bx=sx-36;
+  const ty=e.y+(e.h/2)-20+(dy||0);
+  cx.save();cx.translate(bx,ty);
+  const w=Math.sin(s.tick*(0.08+e.p*0.02))*1.5;
+  // shadow
+  cx.fillStyle='rgba(0,0,0,.18)';cx.beginPath();cx.ellipse(0,36,11,3,0,0,Math.PI*2);cx.fill();
+  // body
+  const st2=NSTY[e.p];
+  cx.fillStyle='#333';cx.fillRect(-6,18+w,5,20);cx.fillRect(2,18-w,5,20);
+  cx.fillStyle='#555';cx.fillRect(-7,36+w,8,5);cx.fillRect(1,36-w,8,5);
+  cx.fillStyle=st2.body;cx.fillRect(-11,-8,22,27);
+  cx.fillStyle=e.p===1?'#ddeeff':'#fff';cx.fillRect(-4,-8,8,7);
+  cx.fillStyle=st2.body;cx.fillRect(-16,-6,6,16);cx.fillRect(10,-6,6,16);
+  cx.fillStyle=st2.skin;cx.fillRect(-16,8,6,8);cx.fillRect(10,8,6,8);
+  cx.fillStyle=st2.skin;cx.beginPath();cx.ellipse(0,-20,10,12,0,0,Math.PI*2);cx.fill();
+  cx.fillStyle=st2.hair;cx.beginPath();cx.arc(0,-26,11,Math.PI,0);cx.fill();cx.fillRect(-11,-26,22,6);
+  if(e.p===1){// glasses
+    cx.strokeStyle='#888';cx.lineWidth=1;
+    cx.beginPath();cx.arc(-4,-23,3,0,Math.PI*2);cx.stroke();
+    cx.beginPath();cx.arc(4,-23,3,0,Math.PI*2);cx.stroke();
+    cx.beginPath();cx.moveTo(-1,-23);cx.lineTo(1,-23);cx.stroke();
+  }
+  cx.fillStyle='#222';cx.fillRect(-4,-22,3,3);cx.fillRect(2,-22,3,3);
+  cx.fillStyle='#a04020';cx.fillRect(-3,-13,7,2);
+  // platform label
+  cx.fillStyle=PCOL[e.p];cx.font='bold 5px "Press Start 2P",monospace';cx.textAlign='center';
+  cx.shadowColor=PCOL[e.p];cx.shadowBlur=3;cx.fillText(PLBL[e.p],0,-42);cx.shadowBlur=0;
   cx.restore();
 }
 function drawCard(e,sx,s,dy){
   if(!e.hp)return;
   cx.save();
-  cx.fillStyle=e.flash>0?'#2a0015':e.cc;cx.fillRect(sx,e.y+dy,e.w,e.h);
+  cx.fillStyle=e.flash>0?'#2a0015':'#060814';
+  cx.fillRect(sx,e.y+dy,e.w,e.h);
   cx.strokeStyle=e.flash>0?'#ffff00':'#4466aa';cx.lineWidth=e.flash>0?2.5:1.5;
-  cx.strokeRect(sx,e.y+dy,e.w,e.h);cx.shadowBlur=0;
+  cx.strokeRect(sx,e.y+dy,e.w,e.h);
   cx.fillStyle='#1a1a3a';cx.fillRect(sx+1,e.y+1+dy,e.w-2,16);
   cx.fillStyle=PCOL[e.p]||'#333';cx.fillRect(sx+1,e.y+1+dy,4,16);
-  // Show only platform name in badge (no fake/real hint)
-  const platNames=['LINE','DCARD','Threads'];
   cx.fillStyle='#fff';cx.font='bold 6px "Press Start 2P",monospace';cx.textAlign='left';
-  cx.fillText(platNames[e.p]||'',sx+5,e.y+12+dy);
+  cx.fillText(PLBL[e.p],sx+8,e.y+12+dy);
   const lines=e.txt.split('\n');
   lines.forEach((l,i)=>{
     if(i>=4)return;const fy=e.y+28+i*15+dy;
     cx.font="bold 12px 'Noto Sans TC','Microsoft JhengHei',sans-serif";
     cx.fillStyle='rgba(0,0,0,.8)';cx.fillText(l,sx+7,fy+1);
-    cx.fillStyle='#f0eaff';cx.fillText(l,sx+6,fy); // neutral color, no real/fake hint
+    cx.fillStyle='#ffe8f8';cx.fillText(l,sx+6,fy);
   });
   if(e.captured){cx.strokeStyle='#ffff00';cx.lineWidth=2;cx.shadowColor='#ffff00';cx.shadowBlur=10;cx.strokeRect(sx-3,e.y-3+dy,e.w+6,e.h+6);cx.shadowBlur=0;}
   cx.restore();
-  // Draw NPC to the LEFT of card, not overlapping text
-  drawNPCSprLeft(e,sx,s,dy);
+  drawNPCSpr(sx,e,s,dy);
 }
 
-/* ══ BOSS ROBOT ══ */
+/* ══ BOSS ══ */
 function drawBoss(s){
   const bx=s.bossX,by=GROUND+8,t=s.tick;
-  // FALLING animation
   if(s.bossFalling){
     const fd=s.bossDeadTick;
-    const tilt=Math.min(fd*1.8,90);
-    const fallY=Math.min(fd*2.5,220);
-    cx.save();cx.translate(bx+60,by-100+fallY);cx.rotate(tilt*Math.PI/180);
-    // Draw boss falling (scaled down)
-    drawBossBody(cx,0,0,t,s,0.85);
-    cx.restore();
-    // Explosion particles when hitting ground
+    cx.save();cx.translate(bx+60,by-100+Math.min(fd*2.5,220));cx.rotate(Math.min(fd*1.8,90)*Math.PI/180);
+    drawBossBody(cx,0,0,t,s,.85);cx.restore();
     if(fd>85&&fd<140&&fd%4===0){
-      const px=bx+Math.random()*120;const py=by-20+Math.random()*30;
       cx.fillStyle=['#ff2200','#ff8800','#ffff00'][Math.floor(Math.random()*3)];
-      cx.fillRect(px,py,5+Math.random()*8,5+Math.random()*8);
+      cx.fillRect(bx+Math.random()*120,by-20+Math.random()*30,5+Math.random()*8,5+Math.random()*8);
     }
     return;
   }
   if(s.bossDead){
-    // Head only, on ground, smoke
-    const hx=bx+12,hy=by-60;
-    const hb=Math.abs(Math.sin(t*.06))*4;
+    const hx=bx+12,hy=by-60,hb=Math.abs(Math.sin(t*.06))*4;
     cx.save();cx.translate(hx+36,hy+hb);cx.rotate(.12);
-    // head
     cx.fillStyle='#1a1a2e';cx.fillRect(-30,-26,60,48);
     cx.strokeStyle='#ff009044';cx.lineWidth=2;cx.strokeRect(-30,-26,60,48);
     cx.fillStyle='#330000';cx.fillRect(-22,-18,44,22);
     cx.fillStyle='#ff4444';cx.font='bold 18px sans-serif';cx.textAlign='center';
     cx.fillText('×',-12,-2);cx.fillText('×',12,-2);
-    // smoke puffs
-    for(let i=0;i<3;i++){
-      const sa=t*.04+i*1.2;
-      cx.fillStyle=`rgba(80,80,80,${.3-i*.08})`;
-      cx.beginPath();cx.arc(Math.cos(sa)*8,-(24+i*14+Math.sin(t*.05+i)*4),8+i*3,0,Math.PI*2);cx.fill();
-    }
+    for(let i=0;i<3;i++){const sa=t*.04+i*1.2;cx.fillStyle=`rgba(80,80,80,${.3-i*.08})`;cx.beginPath();cx.arc(Math.cos(sa)*8,-(24+i*14+Math.sin(t*.05+i)*4),8+i*3,0,Math.PI*2);cx.fill();}
     cx.restore();
-    // confetti
-    for(let i=0;i<6;i++){
-      const sa=t*.09+i*1.05;
-      cx.fillStyle=['#ff0090','#ff4400','#ffff00'][i%3];
-      cx.fillRect(bx+36+Math.cos(sa)*(20+Math.sin(t*.06+i)*10),hy-10+Math.sin(sa)*14,3,3);
-    }
+    for(let i=0;i<6;i++){const sa=t*.09+i*1.05;cx.fillStyle=['#ff0090','#ff4400','#ffff00'][i%3];cx.fillRect(bx+36+Math.cos(sa)*(20+Math.sin(t*.06+i)*10),hy-10+Math.sin(sa)*14,3,3);}
     return;
   }
   drawBossBody(cx,bx,by,t,s,1.0);
 }
-
 function drawBossBody(c,bx,by,t,s,scale){
   c.save();if(scale!==1)c.scale(scale,scale);
   const bob=Math.sin(t*.045)*4;
-  // FEET / TREADS
   c.fillStyle='#111';c.fillRect(bx-5,by-18,46,18);c.fillRect(bx+65,by-18,46,18);
   for(let i=0;i<7;i++){c.fillStyle='#222';c.fillRect(bx-4+i*6,by-18,4,18);c.fillRect(bx+66+i*6,by-18,4,18);}
   c.fillStyle='#ff2200';c.fillRect(bx-5,by-22,46,6);c.fillRect(bx+65,by-22,46,6);
-  // LEGS
   c.fillStyle='#1e1e30';c.fillRect(bx+5,by-100+bob,40,82);c.fillRect(bx+65,by-100+bob,40,82);
   c.fillStyle='#2a2a44';c.fillRect(bx+8,by-70+bob,34,12);c.fillRect(bx+68,by-70+bob,34,12);
-  // TORSO — much bigger
   c.fillStyle='#1a1a2a';c.fillRect(bx-8,by-220+bob,130,122);
   c.strokeStyle='#ff0090';c.lineWidth=2.5;c.strokeRect(bx-8,by-220+bob,130,122);
-  // Chest screen
   c.fillStyle='#050010';c.fillRect(bx+8,by-208+bob,94,70);
   c.strokeStyle='#ff0090';c.lineWidth=1;c.strokeRect(bx+8,by-208+bob,94,70);
-  // Scrolling fake news text on screen
   c.fillStyle='#ff333388';c.font='5px monospace';c.textAlign='left';
   const txt='假新聞 FAKE 謠言 ';const so=(t*2)%(txt.length*4);
   c.fillText(txt,bx+10-so,by-178+bob);c.fillText(txt,bx+10-so+txt.length*4,by-178+bob);
   c.fillText(txt,bx+10-so,by-165+bob);c.fillText(txt,bx+10-so+txt.length*4,by-165+bob);
-  // HP eyes on chest
   const hpMax=5;
   for(let i=0;i<hpMax;i++){
-    const alive=i<s.bossHP;
-    const ex=bx+18+i*20,ey=by-198+bob;
+    const alive=i<s.bossHP;const ex=bx+18+i*20,ey=by-198+bob;
     c.shadowColor=alive?'#ff0000':'#220000';c.shadowBlur=alive?14:0;
     c.fillStyle=alive?'#ff0000':'#220000';c.beginPath();c.arc(ex,ey,7,0,Math.PI*2);c.fill();
     if(alive){c.fillStyle='#ff6666';c.beginPath();c.arc(ex,ey,3,0,Math.PI*2);c.fill();}
-    else{c.fillStyle='#440000';c.fillText('×',ex-3,ey+3);}
+    else{c.fillStyle='#440000';c.textAlign='center';c.fillText('×',ex,ey+3);}
   }
   c.shadowBlur=0;
-  // ARMS — long and scary
   const arm=Math.sin(t*.05)*14;
   c.fillStyle='#1e1e30';
   c.fillRect(bx-52,by-215+bob+arm,46,80);c.fillRect(bx+122,by-215+bob-arm,46,80);
-  // Claws
   c.fillStyle='#ff2200';
   c.fillRect(bx-56,by-138+bob+arm,54,14);c.fillRect(bx+118,by-138+bob-arm,54,14);
-  // Claw spikes
-  for(let i=0;i<4;i++){
-    c.fillRect(bx-54+i*10,by-152+bob+arm,8,16);
-    c.fillRect(bx+120+i*10,by-152+bob-arm,8,16);
-  }
-  // SHOULDER PADS
+  for(let i=0;i<4;i++){c.fillRect(bx-54+i*10,by-152+bob+arm,8,16);c.fillRect(bx+120+i*10,by-152+bob-arm,8,16);}
   c.fillStyle='#2a2a3a';c.fillRect(bx-16,by-222+bob,22,30);c.fillRect(bx+110,by-222+bob,22,30);
   c.strokeStyle='#ff009066';c.lineWidth=1;c.strokeRect(bx-16,by-222+bob,22,30);c.strokeRect(bx+110,by-222+bob,22,30);
-  // HEAD
   c.fillStyle='#1a1a2e';c.fillRect(bx+8,by-290+bob,94,72);
   c.strokeStyle='#ff0090';c.lineWidth=2;c.strokeRect(bx+8,by-290+bob,94,72);
-  // Visor
   const vp=Math.sin(t*.08)*.5+.5;
   c.fillStyle=`rgba(255,${Math.floor(20+vp*80)},0,0.75)`;c.shadowColor='#ff2200';c.shadowBlur=16;
   c.fillRect(bx+16,by-276+bob,78,28);c.shadowBlur=0;
-  // Pupils in visor
   c.fillStyle='#ff0000';c.shadowColor='#ff0000';c.shadowBlur=10;
   c.beginPath();c.arc(bx+36,by-263+bob,6,0,Math.PI*2);c.fill();
   c.beginPath();c.arc(bx+74,by-263+bob,6,0,Math.PI*2);c.fill();
   c.fillStyle='#fff';c.beginPath();c.arc(bx+38,by-265+bob,2,0,Math.PI*2);c.fill();
   c.beginPath();c.arc(bx+76,by-265+bob,2,0,Math.PI*2);c.fill();
   c.shadowBlur=0;
-  // Antenna
   c.strokeStyle='#ff0090';c.lineWidth=2;c.beginPath();c.moveTo(bx+55,by-290+bob);c.lineTo(bx+55,by-318+bob);c.stroke();
   c.fillStyle='#ff0090';c.shadowColor='#ff0090';c.shadowBlur=10;c.beginPath();c.arc(bx+55,by-320+bob,7,0,Math.PI*2);c.fill();c.shadowBlur=0;
-  // Boss label
   c.fillStyle='#ff4400';c.shadowColor='#ff4400';c.shadowBlur=8;
-  c.font='bold 9px "Press Start 2P",monospace';c.textAlign='center';
-  c.fillText('FAKE BOT',bx+55,by-328+bob);c.shadowBlur=0;
-  // HP bar
+  c.font='bold 9px "Press Start 2P",monospace';c.textAlign='center';c.fillText('FAKE BOT',bx+55,by-328+bob);c.shadowBlur=0;
   const bhr=Math.max(0,s.bossHP)/hpMax;
   c.fillStyle='#1a0010';c.fillRect(bx-8,by-340+bob,130,10);
   c.fillStyle=bhr>.5?'#ff2200':bhr>.25?'#ff8800':'#ff0090';c.fillRect(bx-8,by-340+bob,130*bhr,10);
   c.strokeStyle='#ff0090';c.lineWidth=1;c.strokeRect(bx-8,by-340+bob,130,10);
-  c.fillStyle='#fff';c.font='bold 5px "Press Start 2P",monospace';c.textAlign='center';
-  c.fillText('BOSS HP',bx+55,by-332+bob);
+  c.fillStyle='#fff';c.font='bold 5px "Press Start 2P",monospace';c.textAlign='center';c.fillText('BOSS HP',bx+55,by-332+bob);
   c.restore();
 }
-
 function drawBurstFX(s,cam){
   const e=s.burstT;if(!e)return;
-  const sx=e.wx-cam,ew=e.w,eh=e.h;
-  if(Math.floor(s.tick/3)%2===0){cx.strokeStyle='#ff8800';cx.lineWidth=3;cx.shadowColor='#ff8800';cx.shadowBlur=20;cx.strokeRect(sx-4,e.y-4,ew+8,eh+8);cx.shadowBlur=0;}
+  const sx=e.wx-cam;
+  if(Math.floor(s.tick/3)%2===0){cx.strokeStyle='#ff8800';cx.lineWidth=3;cx.shadowColor='#ff8800';cx.shadowBlur=20;cx.strokeRect(sx-4,e.y-4,e.w+8,e.h+8);cx.shadowBlur=0;}
   cx.strokeStyle='#ff8800';cx.lineWidth=2;cx.shadowColor='#ff8800';cx.shadowBlur=10;cx.setLineDash([5,3]);
-  cx.beginPath();cx.moveTo(s.px-cam+22,s.py-35);cx.lineTo(sx+ew/2,e.y+eh/2);cx.stroke();
+  cx.beginPath();cx.moveTo(s.px-cam+22,s.py-35);cx.lineTo(sx+e.w/2,e.y+e.h/2);cx.stroke();
   cx.setLineDash([]);cx.shadowBlur=0;
 }
 
-/* ══ HUD ══ */
-function updHUD(s){
-  const hl=document.getElementById('hl'),hc=document.getElementById('hc');
-  if(!hl)return;
-  hl.innerHTML=`分數:${s.score}<br>${s.boss?`<span style="color:#ff0000">BOSS HP:${'♥'.repeat(Math.max(0,s.bossHP))}</span>`:`LV.${s.lvl} 剩:${s.lqLeft}`}`;
-  hc.innerHTML=`LV.${s.lvl}`;
-  document.getElementById('h-rec').textContent=s.rec.length;
-  const rf=document.getElementById('rep-fill');if(rf){const r=s.rep;rf.style.width=r+'%';rf.style.background=r>50?'#0f0':r>25?'#ff0':'#f00';}
-  if(s.burst){
-    document.getElementById('burst-ov').classList.remove('hidden');
-    const bf=document.getElementById('burst-fill');
-    const bh=document.getElementById('burst-heart');
-    const bc=document.getElementById('burst-clicks');
-    const sl=document.getElementById('burst-speed-label');
-    const nl=document.getElementById('burst-npc-label');
-    if(bf){bf.style.width=(s.burstBar*100)+'%';bf.style.background=s.burstBar>.65?'linear-gradient(90deg,#00f0ff,#00ff88)':s.burstBar>.35?'linear-gradient(90deg,#ffff00,#ff8800)':'linear-gradient(90deg,#ff4400,#ff0000)';}
-    if(bh)bh.style.left=`calc(${s.burstBar*100}% - 10px)`;
-    if(bc)bc.textContent=`×${s.burstClicks} 按擊`;
-    if(sl){const spd=['慢速反推','普通反推','快速反推','高速反推','極速反推'][Math.min(s.lvl-1,4)];sl.textContent=`Lv${s.lvl} — ${spd}`;}
-    if(nl&&s.burstT){const plbl=PLBL[s.burstT.p]||'NPC';nl.textContent=`${plbl} 反擊中 💢`;}
-  }else{document.getElementById('burst-ov').classList.add('hidden');}
-}
-
-/* ══ GAME CONTROL ══ */
-function handleStart(){
-  gac();
-  S=mkState();phase='playing';bossWarnShown=false;
-  document.getElementById('intro').classList.add('hidden');
-  document.getElementById('ending').classList.add('hidden');
-  document.getElementById('hud').style.display='flex';
-  stopFire();
-  if(animId)cancelAnimationFrame(animId);
-  loop();
-}
-function loop(){
-  if(phase==='playing'){
-    if(S&&!S.judging&&!S.burst)update(S);
-    if(S&&S.burst&&S.burstBar>=1.0)finishBurst();
-    if(S)render(S);
-  }
-  animId=requestAnimationFrame(loop);
-}
-function showMsg(txt,col,dur=1200){
-  const el=document.getElementById('msg');
-  el.textContent=txt;el.style.color=col||'#ffff00';el.style.opacity='1';
-  clearTimeout(el._t);el._t=setTimeout(()=>el.style.opacity='0',dur);
-}
-
-/* ══ JUDGE ══ */
-function openJudge(npc){
-  judgeNPC=npc;jT=JTIME;S.judging=true;sfx.aim();
-  // Badge shows platform only - no category hint
-document.getElementById('jbadge').textContent='[ '+['LINE','DCARD','Threads'][npc.p]+' ]';
-  document.getElementById('jtext').innerHTML=npc.txt.split('\n').map(l=>`<div>${l}</div>`).join('');
-  const cd=document.getElementById('judge-countdown');
-  cd.textContent=jT;cd.classList.remove('urgent');
-  document.getElementById('jtimer-fill').style.width='100%';
-  document.getElementById('jtimer-fill').style.background='#00ff88';
-  document.getElementById('judge-panel').classList.remove('hidden');
-  clearInterval(jInterval);
-  jInterval=setInterval(()=>{
-    jT--;sfx.countdown(jT);
-    const pct=(jT/JTIME)*100;
-    document.getElementById('jtimer-fill').style.width=pct+'%';
-    document.getElementById('jtimer-fill').style.background=jT>3?'#00ff88':jT>1?'#ffff00':'#ff0000';
-    const cd2=document.getElementById('judge-countdown');
-    cd2.textContent=jT;
-    if(jT<=2)cd2.classList.add('urgent'); else cd2.classList.remove('urgent');
-    if(jT<=0){clearInterval(jInterval);closeJudge(false,true);}
-  },1000);
-}
-function closeJudge(ok,timeout){
-  clearInterval(jInterval);
-  document.getElementById('judge-panel').classList.add('hidden');
-  document.getElementById('judge-countdown').classList.remove('urgent');
-  if(judgeNPC){judgeNPC.captured=false;}
-  S.judging=false;judgeNPC=null;
-}
-function handleJudgeAnswer(idx){
-  if(!judgeNPC||!S)return;
-  clearInterval(jInterval);
-  document.getElementById('judge-panel').classList.add('hidden');
-  document.getElementById('judge-countdown').classList.remove('urgent');
-  if(judgeNPC.real){
-    sfx.miss();S.rep=Math.max(0,S.rep-15);S.judging=false;
-    const lost=Math.min(2,S.rec.length);S.rec.splice(S.rec.length-lost,lost);
-    showMsg(`⚠ 誤判真實新聞！-15公信力`,'#ff4444');
-    judgeNPC.captured=false;judgeNPC=null;return;
-  }
-  if(idx===judgeNPC.ans){
-    sfx.hit();
-    S.burst=true;S.burstT=judgeNPC;S.burstClicks=0;
-    S.burstTimer=600; // 10 sec max, but bar decides the outcome
-    S.burstBar=0.6; // slight head-start for player
-    S.judging=false;judgeNPC=null;
-  }else{
-    sfx.miss();S.rep=Math.max(0,S.rep-15);S.judging=false;
-    showMsg('❌ 判讀錯誤！-15公信力','#ff4444');
-    judgeNPC.captured=false;judgeNPC=null;
-  }
-}
-
-/* ══ BURST ══ */
-function finishBurst(){
-  if(!S||!S.burstT)return;
-  S.score+=Math.min(S.burstClicks*15,400);
-  if(!S.burstT.rec){
-    S.burstT.rec=true;S.burstT.ghostAlpha=.45;S.rec.push(S.burstT);
-    if(!S.burstT.real){S.lqLeft=Math.max(0,S.lqLeft-1);if(S.boss)S.bossHP=Math.max(0,S.bossHP-1);}
-    spawnParts(S.burstT.wx+S.burstT.w/2,S.burstT.y+30,22);
-  }
-  S.burst=false;S.burstT=null;S.burstClicks=0;S.burstBar=.5;
-  S.msg='✨ 收復成功！';S.msgT=60;
-}
-function failBurst(){
-  if(!S)return;
-  const plbl=S.burstT?PLBL[S.burstT.p]||'NPC':'NPC';
-  sfx.miss();S.rep=Math.max(0,S.rep-20);S.stunned=true;S.stunT=90;
-  if(S.burstT){S.burstT.hp=0;}  // NPC escapes (disappears)
-  S.burst=false;S.burstT=null;S.burstClicks=0;S.burstBar=.5;
-  S.msg=`💀 ${plbl} 反擊成功！輿論被壓制！-20`;S.msgT=100;
-}
-
-/* ══ END ══ */
-function endGame(win){
-  phase='ending';if(animId)cancelAnimationFrame(animId);
-  document.getElementById('hud').style.display='none';
-  stopFire();
-  win?sfx.victory():sfx.defeat();
-  const sc=S?S.score:0,cnt=S?S.rec.length:0;
-  const et=document.getElementById('end-title');
-  et.textContent=win?'🎉 假新聞終結！':'💀 任務失敗';
-  et.style.color=win?'#00ff88':'#ff0090';et.style.textShadow=`0 0 8px ${win?'#00ff88':'#ff0090'}`;
-  document.getElementById('end-text').innerHTML=`分數: <span style="color:#ffff00">${sc}</span><br>收復NPC: <span style="color:${win?'#00ff88':'#ff4444'}">${cnt}</span><br>${win?'踩著機器人的頭顱，高舉放大鏡！':'<span style="color:#ff6666;font-family:sans-serif;font-size:12px">謠言淹沒了你...</span>'}`;
-  document.getElementById('ending').classList.remove('hidden');
-  document.getElementById('ending').style.border=`4px double ${win?'#00ff88':'#ff0090'}`;
-  runEndAnim(win,cnt);
-}
-function runEndAnim(win,cnt){
-  const ec=document.getElementById('end-canvas');if(!ec)return;
-  const c2=ec.getContext('2d');let t=0;
-  const ants=[];if(!win){for(let i=0;i<40;i++)ants.push({a:(i/40)*Math.PI*2,r:52+Math.random()*18,sp:.016+Math.random()*.01});}
-  const run=()=>{
-    t++;c2.clearRect(0,0,300,200);const ox=150,oy=100;
-    if(win){
-      // Boss head on ground
-      const hx=ox-30,hy=oy+50,hb=Math.abs(Math.sin(t*.04))*3;
-      for(let i=0;i<6;i++){const sa=t*.09+i*1.05;c2.fillStyle=['#ff0090','#ff4400','#ffff00'][i%3];c2.fillRect(hx+30+Math.cos(sa)*(14+Math.sin(t*.06+i)*6),hy+Math.sin(sa)*10,3,3);}
-      c2.save();c2.translate(hx+36,hy+hb);c2.rotate(.15);
-      c2.fillStyle='#1a1a2e';c2.fillRect(-28,-22,56,42);
-      c2.strokeStyle='#ff009055';c2.lineWidth=2;c2.strokeRect(-28,-22,56,42);
-      c2.fillStyle='#ff4444';c2.font='bold 15px sans-serif';c2.textAlign='center';
-      c2.fillText('×',-10,6);c2.fillText('×',12,6);c2.restore();
-      // Player triumph
-      miniPlayer(c2,ox-8,hy+hb-4,t,true);
-      for(let i=0;i<14;i++){const px=(Math.sin(t*.03+i*2.5)*.5+.5)*280+10,py=((t*1.5+i*40)%210)-10;c2.fillStyle=['#ff0090','#00f0ff','#ffff00','#00ff88'][i%4];c2.fillRect(px,py,4,4);}
-      const nc=Math.min(cnt,5);for(let i=0;i<nc;i++){const a=(i/nc)*Math.PI*2+t*.02,r=56+Math.sin(t*.05+i)*6;const nx=ox+Math.cos(a)*r,ny=oy+28+Math.sin(a)*r*.35;c2.save();c2.translate(nx,ny);const b=Math.sin(t*.12+i*2)*3;c2.translate(0,b);const cols=[{body:'#0d6e2a',skin:'#f5c896'},{body:'#0a2a8c',skin:'#f8d5a0'},{body:'#111',skin:'#f0c888'}];const co=cols[i%3];c2.fillStyle=co.skin;c2.fillRect(-4,-14,8,8);c2.fillStyle=co.body;c2.fillRect(-5,-6,10,10);c2.fillRect(-4,4,4,6);c2.fillRect(1,4,4,6);c2.restore();}
-    }else{
-      miniPlayer(c2,ox,oy+28,t,false);
-      for(const ant of ants){ant.a+=ant.sp;const ax=ox+Math.cos(ant.a)*ant.r,ay=oy+28+Math.sin(ant.a)*ant.r*.4;c2.fillStyle='#8B4513';c2.fillRect(ax-2,ay-1,4,3);c2.fillStyle='#5C3317';c2.fillRect(ax-1,ay-2,2,2);c2.fillRect(ax,ay+1,1,2);}
-      for(let i=0;i<3;i++){const sa=t*.06+i*(Math.PI*2/3);c2.fillStyle='#ffff00';c2.font='10px serif';c2.textAlign='center';c2.fillText('⭐',ox+Math.cos(sa)*16-5,oy+8+Math.sin(sa)*7);}
-    }
-    requestAnimationFrame(run);
-  };run();
-}
+/* ══ END-SCREEN ANIM ══ */
 function miniPlayer(c,x,y,t,happy){
   c.save();c.translate(x,y);
   if(!happy){
@@ -1063,40 +808,200 @@ function miniPlayer(c,x,y,t,happy){
   }
   c.restore();
 }
+function runEndAnim(win,cnt){
+  const ec=document.getElementById('end-canvas');if(!ec)return;
+  const c2=ec.getContext('2d');let t=0;
+  const ants=[];if(!win){for(let i=0;i<40;i++)ants.push({a:(i/40)*Math.PI*2,r:52+Math.random()*18,sp:.016+Math.random()*.01});}
+  const run=()=>{
+    t++;c2.clearRect(0,0,300,200);const ox=150,oy=100;
+    if(win){
+      const hx=ox-30,hy=oy+50,hb=Math.abs(Math.sin(t*.04))*3;
+      for(let i=0;i<6;i++){const sa=t*.09+i*1.05;c2.fillStyle=['#ff0090','#ff4400','#ffff00'][i%3];c2.fillRect(hx+30+Math.cos(sa)*(14+Math.sin(t*.06+i)*6),hy+Math.sin(sa)*10,3,3);}
+      c2.save();c2.translate(hx+36,hy+hb);c2.rotate(.15);
+      c2.fillStyle='#1a1a2e';c2.fillRect(-28,-22,56,42);c2.strokeStyle='#ff009055';c2.lineWidth=2;c2.strokeRect(-28,-22,56,42);
+      c2.fillStyle='#ff4444';c2.font='bold 15px sans-serif';c2.textAlign='center';c2.fillText('×',-10,6);c2.fillText('×',12,6);c2.restore();
+      miniPlayer(c2,ox-8,hy+hb-4,t,true);
+      for(let i=0;i<14;i++){const px=(Math.sin(t*.03+i*2.5)*.5+.5)*280+10,py=((t*1.5+i*40)%210)-10;c2.fillStyle=['#ff0090','#00f0ff','#ffff00','#00ff88'][i%4];c2.fillRect(px,py,4,4);}
+      const nc=Math.min(cnt,5);for(let i=0;i<nc;i++){const a=(i/nc)*Math.PI*2+t*.02,r=56+Math.sin(t*.05+i)*6;const nx=ox+Math.cos(a)*r,ny=oy+28+Math.sin(a)*r*.35;c2.save();c2.translate(nx,ny);c2.translate(0,Math.sin(t*.12+i*2)*3);const cols=[{body:'#0d6e2a',skin:'#f5c896'},{body:'#0a2a8c',skin:'#f8d5a0'},{body:'#111',skin:'#f0c888'}];const co=cols[i%3];c2.fillStyle=co.skin;c2.fillRect(-4,-14,8,8);c2.fillStyle=co.body;c2.fillRect(-5,-6,10,10);c2.fillRect(-4,4,4,6);c2.fillRect(1,4,4,6);c2.restore();}
+    }else{
+      miniPlayer(c2,ox,oy+28,t,false);
+      for(const ant of ants){ant.a+=ant.sp;const ax=ox+Math.cos(ant.a)*ant.r,ay=oy+28+Math.sin(ant.a)*ant.r*.4;c2.fillStyle='#8B4513';c2.fillRect(ax-2,ay-1,4,3);c2.fillStyle='#5C3317';c2.fillRect(ax-1,ay-2,2,2);c2.fillRect(ax,ay+1,1,2);}
+      for(let i=0;i<3;i++){const sa=t*.06+i*(Math.PI*2/3);c2.fillStyle='#ffff00';c2.font='10px serif';c2.textAlign='center';c2.fillText('⭐',ox+Math.cos(sa)*16-5,oy+8+Math.sin(sa)*7);}
+    }
+    requestAnimationFrame(run);
+  };run();
+}
+
+/* ══ GAME CONTROL ══ */
+function handleStart(){
+  gac();
+  S=mkState();phase='playing';bossWarnShown=false;
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('ending').classList.add('hidden');
+  document.getElementById('hud').style.display='flex';
+  stopFire();
+  if(animId)cancelAnimationFrame(animId);
+  loop();
+}
+function loop(){
+  if(phase==='playing'){
+    if(S&&!S.judging&&!S.burst)update(S);
+    if(S)render(S);
+  }
+  animId=requestAnimationFrame(loop);
+}
+function showMsg(txt,col,dur=1200){
+  const el=document.getElementById('msg');
+  el.textContent=txt;el.style.color=col||'#ffff00';el.style.opacity='1';
+  clearTimeout(el._t);el._t=setTimeout(()=>el.style.opacity='0',dur);
+}
+
+/* ══ JUDGE ══ */
+function openJudge(npc){
+  judgeNPC=npc;jT=JTIME;S.judging=true;sfx.aim();
+  document.getElementById('jbadge').textContent='[ '+PLBL[npc.p]+' ]';
+  document.getElementById('jtext').innerHTML=npc.txt.split('\n').map(l=>'<div>'+l+'</div>').join('');
+  const cd=document.getElementById('judge-countdown');
+  cd.textContent=jT;cd.classList.remove('urgent');
+  document.getElementById('jtimer-fill').style.width='100%';
+  document.getElementById('jtimer-fill').style.background='#00ff88';
+  document.getElementById('judge-panel').classList.remove('hidden');
+  clearInterval(jInterval);
+  jInterval=setInterval(()=>{
+    jT--;sfx.countdown(jT);
+    const pct=(jT/JTIME)*100;
+    document.getElementById('jtimer-fill').style.width=pct+'%';
+    document.getElementById('jtimer-fill').style.background=jT>4?'#00ff88':jT>2?'#ffff00':'#ff0000';
+    const cd2=document.getElementById('judge-countdown');cd2.textContent=jT;
+    if(jT<=2)cd2.classList.add('urgent');else cd2.classList.remove('urgent');
+    if(jT<=0){clearInterval(jInterval);closeJudge(false,true);}
+  },1000);
+}
+function closeJudge(ok,timeout){
+  clearInterval(jInterval);
+  document.getElementById('judge-panel').classList.add('hidden');
+  document.getElementById('judge-countdown').classList.remove('urgent');
+  if(judgeNPC){judgeNPC.captured=false;}
+  S.judging=false;judgeNPC=null;
+}
+function handleJudgeAnswer(idx){
+  if(!judgeNPC||!S)return;
+  clearInterval(jInterval);
+  document.getElementById('judge-panel').classList.add('hidden');
+  document.getElementById('judge-countdown').classList.remove('urgent');
+  if(judgeNPC.real){
+    sfx.miss();S.rep=Math.max(0,S.rep-15);S.judging=false;
+    const lost=Math.min(2,S.rec.length);S.rec.splice(S.rec.length-lost,lost);
+    S.wrongCount=(S.wrongCount||0)+1;
+    showMsg('⚠ 誤判真實新聞！-15公信力 ('+S.wrongCount+'/5)','#ff4444');
+    judgeNPC.captured=false;judgeNPC=null;
+    if(S.wrongCount>=5)endGame(false,'wrong');
+    return;
+  }
+  if(idx===judgeNPC.ans){
+    sfx.hit();
+    const isBoss=S.boss;
+    const needed=isBoss?50:BURST_NEED[Math.min(S.lvl-1,3)];
+    S.burst=true;S.burstT=judgeNPC;S.burstClicks=0;
+    S.burstNeeded=needed;S.burstIsBoss=isBoss;
+    // Timer: 3 seconds in frames (60fps), or large for boss
+    S.burstTimer=isBoss?999999:(BURST_SECS*60);
+    // Reset burst UI
+    const bf=document.getElementById('b-fill');if(bf)bf.style.width='0%';
+    const bt=document.getElementById('b-timer');if(bt)bt.textContent=isBoss?'擊倒Boss！':'剩餘 3.0 秒';
+    const br=document.getElementById('b-remain');if(br){br.textContent='還差 '+needed+' 下';br.style.color='#aaa';}
+    S.judging=false;judgeNPC=null;
+  }else{
+    sfx.miss();S.rep=Math.max(0,S.rep-15);S.judging=false;
+    S.wrongCount=(S.wrongCount||0)+1;
+    showMsg('❌ 判讀錯誤！('+S.wrongCount+'/5) -15公信力','#ff4444');
+    judgeNPC.captured=false;judgeNPC=null;
+    if(S.wrongCount>=5)endGame(false,'wrong');
+  }
+}
+
+/* ══ BURST ══ */
+function finishBurst(){
+  if(!S||!S.burstT)return;
+  S.score+=Math.min(S.burstClicks*15,400);
+  if(!S.burstT.rec){
+    S.burstT.rec=true;S.burstT.ghostAlpha=.45;S.rec.push(S.burstT);
+    if(!S.burstT.real){S.lqLeft=Math.max(0,S.lqLeft-1);if(S.boss)S.bossHP=Math.max(0,S.bossHP-1);}
+    spawnParts(S.burstT.wx+S.burstT.w/2,S.burstT.y+30,22);
+  }
+  S.burst=false;S.burstT=null;S.burstClicks=0;S.burstNeeded=3;S.burstIsBoss=false;
+  S.msg='✨ 收復成功！';S.msgT=60;
+}
+function failBurst(){
+  if(!S)return;
+  sfx.miss();S.wrongCount=(S.wrongCount||0)+1;
+  S.rep=Math.max(0,S.rep-20);S.stunned=true;S.stunT=90;
+  if(S.burstT){S.burstT.captured=false;S.burstT.hp=0;}
+  S.burst=false;S.burstT=null;S.burstClicks=0;S.burstNeeded=3;S.burstIsBoss=false;
+  showMsg('💀 點擊太慢！('+S.wrongCount+'/5) -20公信力','#ff4444');
+  if(S.wrongCount>=5)endGame(false,'wrong');
+}
+
+/* ══ END ══ */
+function endGame(win,reason){
+  phase='ending';if(animId)cancelAnimationFrame(animId);
+  document.getElementById('hud').style.display='none';
+  stopFire();
+  win?sfx.victory():sfx.defeat();
+  const sc=S?S.score:0,cnt=S?S.rec.length:0;
+  const et=document.getElementById('end-title');
+  et.textContent=win?'🎉 假新聞終結！':'💀 任務失敗';
+  et.style.color=win?'#00ff88':'#ff0090';
+  et.style.textShadow='0 0 8px '+(win?'#00ff88':'#ff0090');
+  const failMsg=reason==='wrong'
+    ?'<span style="font-family:sans-serif;font-size:12px;color:#ff6666">判斷錯誤次數過多，被假訊息淹沒！</span>'
+    :'<span style="font-family:sans-serif;font-size:12px;color:#ff6666">公信力歸零，謠言淹沒了你...</span>';
+  document.getElementById('end-text').innerHTML=
+    '分數: <span style="color:#ffff00">'+sc+'</span><br>'
+    +'收復NPC: <span style="color:'+(win?'#00ff88':'#ff4444')+'">'+cnt+'</span><br>'
+    +(win?'踩著機器人的頭顱，高舉放大鏡！':failMsg);
+  document.getElementById('ending').classList.remove('hidden');
+  document.getElementById('ending').style.border='4px double '+(win?'#00ff88':'#ff0090');
+  runEndAnim(win,cnt);
+}
 
 /* ══ INPUT ══ */
-CV.addEventListener('mousemove',e=>{if(!S)return;const r=CV.getBoundingClientRect();S.mx=(e.clientX-r.left)*W/r.width;S.my=(e.clientY-r.top)*H/r.height;});
-CV.addEventListener('touchmove',e=>{if(!S)return;const r=CV.getBoundingClientRect();S.mx=(e.touches[0].clientX-r.left)*W/r.width;S.my=(e.touches[0].clientY-r.top)*H/r.height;},{passive:true});
+CV.addEventListener('mousemove',e=>{
+  if(!S)return;const r=CV.getBoundingClientRect();
+  S.mx=(e.clientX-r.left)*W/r.width;S.my=(e.clientY-r.top)*H/r.height;
+});
+CV.addEventListener('touchmove',e=>{
+  if(!S)return;const r=CV.getBoundingClientRect();
+  S.mx=(e.touches[0].clientX-r.left)*W/r.width;S.my=(e.touches[0].clientY-r.top)*H/r.height;
+},{passive:true});
 CV.addEventListener('click',e=>{
   if(!S)return;
-  if(S.burst){S.burstClicks++;
-    const pa=Math.max(0.037,0.045-(S.lvl-1)*0.002);
-    S.burstBar=Math.min(1.0,S.burstBar+pa);return;}
+  if(S.burst){S.burstClicks++;return;}
   if(S.judging)return;
-  const r=CV.getBoundingClientRect();const px=(e.clientX-r.left)*W/r.width,py=(e.clientY-r.top)*H/r.height;
+  const r=CV.getBoundingClientRect();
+  const px=(e.clientX-r.left)*W/r.width,py=(e.clientY-r.top)*H/r.height;
   const wx=px+(S.camX||0);
   for(const npc of S.npcs){
     if(!npc.hp||npc.rec)continue;
     const dy=npc.drop?(npc.dropY||0):0;
-    if(wx>=npc.wx-10&&wx<=npc.wx+npc.w+10&&py>=npc.y+dy-70&&py<=npc.y+dy+npc.h+10){
+    if(wx>=npc.wx-50&&wx<=npc.wx+npc.w+10&&py>=npc.y+dy-70&&py<=npc.y+dy+npc.h+10){
       if(npc.real){
         sfx.miss();const lost=Math.min(2,S.rec.length);S.rec.splice(S.rec.length-lost,lost);
         S.rep=Math.max(0,S.rep-20);S.stunned=true;S.stunT=80;
-        S.msg=`⚠ 誤判真實新聞！失去${lost}個夥伴！`;S.msgT=90;
+        S.wrongCount=(S.wrongCount||0)+1;
+        showMsg('⚠ 誤判真實新聞！('+S.wrongCount+'/5)','#ff4444');
+        if(S.wrongCount>=5)endGame(false,'wrong');
       }else{npc.captured=true;openJudge(npc);}
       return;
     }
   }
 });
 window.addEventListener('keydown',e=>{
-  if(!S)return;
-  if(e.key===' '&&S.burst){e.preventDefault();S.burstClicks++;
-    const pa=Math.max(0.037,0.045-(S.lvl-1)*0.002);
-    S.burstBar=Math.min(1.0,S.burstBar+pa);}
+  if(phase==='playing'&&S&&e.key===' '&&S.burst){e.preventDefault();S.burstClicks++;}
 });
-
-// Kick off
 requestAnimationFrame(loop);
 </script>
 </body>
 </html>
+HTMLEOF
+echo "Lines: $(wc -l < /home/claude/game_final.html)"
